@@ -10,7 +10,7 @@ namespace ToDoApi.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return new ObjectResult("Health OK");
+            return new JsonResult("Health OK");
         }
         [HttpGet]
         [Route("env")]
