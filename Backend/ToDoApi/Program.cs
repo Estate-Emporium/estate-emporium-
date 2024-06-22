@@ -8,6 +8,10 @@ using TodoApi;
 using TodoApi.Models;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Options;
+using DotNetEnv;
+
+DotNetEnv.Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
