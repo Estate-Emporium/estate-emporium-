@@ -11,6 +11,46 @@ resource "aws_s3_bucket_versioning" "bucket_versioning" {
   }
 }
 
+resource "aws_s3_bucket" "website_bucket" {
+  bucket = "${var.project_name}-website" # Change to your unique bucket name
+  tags   = merge(var.mandatory_tags, { Name = "${var.project_name}-website" })
+}
+
+resource "aws_s3_bucket_website_configuration" "www_bucket" {
+  bucket = aws_s3_bucket.website_bucket.id
+
+  index_document {
+    suffix = "index.html"
+  }
+  error_document {
+    key = "error.html"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "bucket_access_block" {
+  bucket = aws_s3_bucket.website_bucket.id
+
+  block_public_acls   = false
+  block_public_policy = false
+}
+
+resource "aws_s3_bucket_policy" "website_bucket_policy" {
+  bucket = aws_s3_bucket.website_bucket.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect    = "Allow"
+        Principal = "*"
+        Action    = "s3:GetObject"
+        Resource  = "${aws_s3_bucket.website_bucket.arn}/*"
+      }
+    ]
+  })
+}
+
+
 resource "aws_vpc" "vpc" {
   cidr_block           = var.cidr_block
   enable_dns_hostnames = true
@@ -240,6 +280,17 @@ resource "aws_elastic_beanstalk_environment" "web_env" {
   # }
 
 }
+
+resource "aws_acm_certificate" "sever_cert" {
+  domain_name       = "estate-emporium-api.bbdsoftware.com" # Change to your domain
+  validation_method = "DNS"
+}
+
+resource "aws_acm_certificate" "website_bucket_policy_cert" {
+  domain_name       = "estate-emporium.bbdsoftware.com" # Change to your domain
+  validation_method = "DNS"
+}
+
 
 
 
