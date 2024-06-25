@@ -4,6 +4,7 @@ namespace ToDoApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [ApiExplorerSettings(IgnoreApi = true)] //used to hide from swagger, can be applied to entire controller ot jsut 1 endpoint
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
