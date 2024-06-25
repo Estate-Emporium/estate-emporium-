@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'sql/**'
+      - 'SQL/**'
       - '.github/workflows/flyway.yml'
   workflow_dispatch:
   
@@ -29,6 +29,6 @@ jobs:
         FLYWAY_USER: ${{ secrets.DB_USERNAME }}
         FLYWAY_PASSWORD: ${{ secrets.DB_PASSWORD }}
       run: |
-        flyway repair -X -locations=sql/
-        flyway info -X -locations=sql/
-        flyway migrate -X -locations=sql/
+        flyway repair -X -locations=SQL/
+        flyway info -X -locations=SQL/
+        flyway migrate -X -locations=SQL/
