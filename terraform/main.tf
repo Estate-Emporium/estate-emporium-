@@ -1,11 +1,11 @@
 
-resource "aws_s3_bucket" "bucket" {
-  bucket = "${var.project_name}-docker-image-1475"
-  tags   = merge(var.mandatory_tags, { Name = "${var.project_name}-docker-image-1475" })
+resource "aws_s3_bucket" "server_release_bucket" {
+  bucket = "${var.project_name}-server-bucket"
+  tags   = merge(var.mandatory_tags, { Name = "${var.project_name}-server-bucket" })
 }
 
 resource "aws_s3_bucket_versioning" "bucket_versioning" {
-  bucket = aws_s3_bucket.bucket.id
+  bucket = aws_s3_bucket.server_release_bucket.id
   versioning_configuration {
     status = "Enabled"
   }
@@ -16,7 +16,7 @@ resource "aws_s3_bucket" "website_bucket" {
   tags   = merge(var.mandatory_tags, { Name = "${var.project_name}-website" })
 }
 
-resource "aws_s3_bucket_website_configuration" "www_bucket" {
+resource "aws_s3_bucket_website_configuration" "web_config" {
   bucket = aws_s3_bucket.website_bucket.id
 
   index_document {
@@ -30,7 +30,7 @@ resource "aws_s3_bucket_website_configuration" "www_bucket" {
 resource "aws_s3_bucket_public_access_block" "bucket_access_block" {
   bucket = aws_s3_bucket.website_bucket.id
 
-  block_public_acls   = false
+  block_public_acls   = false # Change to true because oaic
   block_public_policy = false
 }
 
@@ -46,10 +46,18 @@ resource "aws_s3_bucket_policy" "website_bucket_policy" {
         Action    = "s3:GetObject"
         Resource  = "${aws_s3_bucket.website_bucket.arn}/*"
       }
+      # ,
+      # {
+      #   Effect = "Allow"
+      #   Principal = {
+      #     AWS = "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path}"
+      #   }
+      #   Action   = "s3:GetObject"
+      #   Resource = "${aws_s3_bucket.website_bucket.arn}/*"
+      # }
     ]
   })
 }
-
 
 resource "aws_vpc" "vpc" {
   cidr_block           = var.cidr_block
@@ -155,16 +163,140 @@ resource "aws_db_instance" "db" {
   tags = merge(var.mandatory_tags, { Name = "${var.project_name}-db" })
 }
 
-resource "aws_elastic_beanstalk_application" "web_app" {
-  name        = "${var.project_name}-web-app"
+resource "aws_acm_certificate" "sever_cert" {
+  domain_name       = "estate-emporium-api.bbdsoftware.com" # Change to your domain
+  validation_method = "DNS"
+}
+
+resource "aws_acm_certificate" "website_cert" {
+  domain_name       = "estate-emporium.bbdsoftware.com" # Change to your domain
+  validation_method = "DNS"
+}
+
+resource "aws_wafv2_web_acl" "waf_acl" {
+  name        = "${var.project_name}-waf-acl"
+  scope       = "REGIONAL"
+  description = "WAF for API Gateway and S3"
+
+  default_action {
+    allow {}
+  }
+
+  tags = merge(var.mandatory_tags, { Name = "${var.project_name}-waf-acl" })
+  visibility_config {
+    cloudwatch_metrics_enabled = true
+    metric_name                = "wafACL"
+    sampled_requests_enabled   = true
+  }
+
+  rule {
+    name     = "AWSManagedRulesCommonRuleSet"
+    priority = 10
+
+    override_action {
+      none {}
+    }
+
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesCommonRuleSet"
+        vendor_name = "AWS"
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "AWSManagedRulesCommonRuleSetMetric"
+      sampled_requests_enabled   = true
+    }
+  }
+
+
+  rule {
+    name     = "AWSManagedRulesKnownBadInputsRuleSet"
+    priority = 20
+
+    override_action {
+      count {}
+    }
+
+    statement {
+      managed_rule_group_statement {
+        name        = "AWSManagedRulesKnownBadInputsRuleSet"
+        vendor_name = "AWS"
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = true
+      metric_name                = "AWSManagedRulesKnownBadInputsRuleSetMetric"
+      sampled_requests_enabled   = true
+    }
+  }
+}
+
+resource "aws_cloudfront_origin_access_identity" "oai" {
+  comment = "OAI for my S3 static website"
+}
+
+# resource "aws_cloudfront_distribution" "s3_distribution" {
+#   origin {
+#     domain_name = aws_s3_bucket.website_bucket.bucket_regional_domain_name
+#     origin_id   = "s3-web-origin"
+
+#     s3_origin_config {
+#       origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
+#     }
+#   }
+
+#   enabled             = true
+#   is_ipv6_enabled     = true
+#   comment             = "S3 Static Estate emporium Website Distribution"
+#   default_root_object = "index.html"
+
+#   default_cache_behavior {
+#     allowed_methods  = ["GET", "HEAD"]
+#     cached_methods   = ["GET", "HEAD"]
+#     target_origin_id = "s3-web-origin"
+
+#     forwarded_values {
+#       query_string = true
+
+#       cookies {
+#         forward = "all"
+#       }
+#     }
+
+#     viewer_protocol_policy = "redirect-to-https"
+
+#     min_ttl     = 0
+#     default_ttl = 0 # 1200 #20 min
+#     max_ttl     = 0 # 10800 #3hr
+#   }
+
+#   restrictions {
+#     geo_restriction {
+#       restriction_type = "none"
+#     }
+#   }
+
+#   viewer_certificate {
+#     cloudfront_default_certificate = true
+#   }
+
+#   # web_acl_id = aws_wafv2_web_acl.waf_acl.id
+# }
+
+resource "aws_elastic_beanstalk_application" "server_app" {
+  name        = "${var.project_name}-api"
   description = "Beanstalk application"
 }
 
-resource "aws_elastic_beanstalk_environment" "web_env" {
-  name                = "${var.project_name}-web-env"
-  application         = aws_elastic_beanstalk_application.web_app.name
-  solution_stack_name = "64bit Amazon Linux 2023 v4.3.2 running Docker"
-  cname_prefix        = "${var.project_name}-web"
+resource "aws_elastic_beanstalk_environment" "server_env" {
+  name                = "${var.project_name}-api"
+  application         = aws_elastic_beanstalk_application.server_app.name
+  solution_stack_name = "64bit Amazon Linux 2023 v4.3.3 running Docker"
+  cname_prefix        = "${var.project_name}-api"
 
   setting {
     namespace = "aws:ec2:vpc"
@@ -230,17 +362,17 @@ resource "aws_elastic_beanstalk_environment" "web_env" {
     value     = "basic"
   }
 
-  setting {
-    namespace = "aws:elbv2:listener:443"
-    name      = "Protocol"
-    value     = "HTTPS"
-  }
+  # setting {
+  #   namespace = "aws:elbv2:listener:443"
+  #   name      = "Protocol"
+  #   value     = "HTTPS"
+  # }
 
-  setting {
-    namespace = "aws:elbv2:listener:443"
-    name      = "ListenerEnabled"
-    value     = "true"
-  }
+  # setting {
+  #   namespace = "aws:elbv2:listener:443"
+  #   name      = "ListenerEnabled"
+  #   value     = "true"
+  # }
 
   setting {
     namespace = "aws:elbv2:listener:80"
@@ -266,11 +398,11 @@ resource "aws_elastic_beanstalk_environment" "web_env" {
     value     = aws_security_group.eb_security_group_lb.id
   }
 
-  setting {
-    namespace = "aws:elbv2:listener:443"
-    name      = "SSLCertificateArns"
-    value     = "arn:aws:acm:eu-west-1:574836245203:certificate/51456bea-3d96-4f9d-a893-904c29d58afe" # Replace with your SSL certificate ARN
-  }
+  # setting {
+  #   namespace = "aws:elbv2:listener:443"
+  #   name      = "SSLCertificateArns"
+  #   value     = "arn:aws:acm:eu-west-1:574836245203:certificate/51456bea-3d96-4f9d-a893-904c29d58afe" # Replace with your SSL certificate ARN
+  # }
 
   # Optional: redirect HTTP to HTTPS
   # setting {
@@ -279,16 +411,6 @@ resource "aws_elastic_beanstalk_environment" "web_env" {
   #   value     = "path-pattern / -> forward: 443, path-pattern /* -> redirect: https://rudolph-sucks.projects.bbdgrad.com#{path}?#{query}"
   # }
 
-}
-
-resource "aws_acm_certificate" "sever_cert" {
-  domain_name       = "estate-emporium-api.bbdsoftware.com" # Change to your domain
-  validation_method = "DNS"
-}
-
-resource "aws_acm_certificate" "website_bucket_policy_cert" {
-  domain_name       = "estate-emporium.bbdsoftware.com" # Change to your domain
-  validation_method = "DNS"
 }
 
 

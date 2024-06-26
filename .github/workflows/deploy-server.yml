@@ -1,0 +1,79 @@
+name: Deploy app on port 80
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/deploy-server.yml'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: deploy-backend-session
+          aws-region: ${{secrets.AWS_REGION}}
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0'
+    
+      - name: Build and Publish API
+        run: |
+            cd Backend/ToDoApi 
+            dotnet publish -c Release -o ../releases
+
+      - name: Generate .env
+        run: |
+            cd Backend/releases
+            echo "SERVER_PORT"=${{ secrets.SERVER_PORT }} > .env 
+            echo "MODE=production" >> .env
+            echo "DB_USERNAME=${{ secrets.DB_USERNAME}}" >> .env
+            echo "DB_PASSWORD=${{ secrets.DB_PASSWORD}}" >> .env
+            echo "DB_NAME=${{ secrets.DB_NAME}}" >> .env
+            echo "DB_ENDPOINT=${{ secrets.DB_ENDPOINT}}" >> .env
+            echo "AWS_REGION=${{ secrets.AWS_REGION}}" >> .env
+
+      - name: Package artifact
+        run: zip -r ./server.zip .env .dockerignore *
+        working-directory: Backend/releases
+
+      - name: list files
+        run: |
+            cd Backend/releases
+            ls -la
+            
+      - name: Upload artifact to S3
+        run: |
+          cd Backend/releases
+          aws s3 cp server.zip s3://${{ secrets.SERVER_RELEASE_BUCKET_NAME }}/application-${{ github.run_id }}.zip
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: deploy-server-session
+          aws-region: ${{secrets.AWS_REGION}}
+
+      - name: Deploy to Elastic Beanstalk
+        run: |
+          aws elasticbeanstalk create-application-version --application-name ${{ secrets.SERVER_APP_NAME }} --version-label ${{ github.run_id }} --source-bundle S3Bucket="${{ secrets.SERVER_RELEASE_BUCKET_NAME }}",S3Key="application-${{ github.run_id }}.zip"
+          aws elasticbeanstalk update-environment --application-name ${{ secrets.SERVER_APP_NAME }} --environment-name ${{ secrets.SERVER_ENV_NAME }} --version-label ${{ github.run_id }}

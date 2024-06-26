@@ -23,7 +23,7 @@ Enter run instructions here
 ## Access the database using MS SQL Server studio
 - Open ms sql sever studio
 - Set server type to database engine
-- Insert {} as the server name
+- Insert {estate-emporium-db.csxil53pu1c8.eu-west-1.rds.amazonaws.com} as the server name
 - Select SQL sever authentication
 - login as admin
 - Password: 
