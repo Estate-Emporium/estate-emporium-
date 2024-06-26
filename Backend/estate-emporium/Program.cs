@@ -18,13 +18,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.WithOrigins(
-                                              Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "https://localhost:5000/").WithMethods("GET", "POST", "PUT", "DELETE")
-                   .WithHeaders("Authorization", "Content-Type", "Accept");
-                      });
+  options.AddPolicy(name: MyAllowSpecificOrigins,
+                    policy =>
+                    {
+                      policy.WithOrigins(
+                                            Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "https://localhost:80/").WithMethods("GET", "POST", "PUT", "DELETE")
+                 .WithHeaders("Authorization", "Content-Type", "Accept");
+                    });
 });
 
 // Add services to the container.
@@ -33,9 +33,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+  options.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+  var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+  options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
 
@@ -47,11 +47,11 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-    });
+  app.UseSwagger();
+  app.UseSwaggerUI(c =>
+  {
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+  });
 }
 
 app.UseHttpsRedirection();

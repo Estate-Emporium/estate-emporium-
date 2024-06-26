@@ -33,6 +33,6 @@ vpc_private_subnets = [
 
 db_port = 1433
 
-eb_port_server = 5000
+eb_port_server = 80
 
 

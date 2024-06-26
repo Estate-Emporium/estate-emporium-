@@ -2,6 +2,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /server
 COPY . .
-EXPOSE 5000
-ENV ASPNETCORE_URLS=http://*:5000
+EXPOSE 80
+ENV ASPNETCORE_URLS=http://*:80
 ENTRYPOINT ["dotnet", "estate-emporium.dll"] #Change to name of actual backend

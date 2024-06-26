@@ -15,7 +15,7 @@
   Property manager is not a company (cannot have a bank account or stocks)
   Intermediary for all real estate stuff
   Centrally managed contracts for sales, mortgages and rentals
-  Spawn a starting set of at least 5000 properties with a capacity of between1 and 8 personas
+  Spawn a starting set of at least 80 properties with a capacity of between1 and 8 personas
   Track who owns what
   Hand of Zeus decides on the initial price of a property not yet owned by anyone
   If property is currently not owned, then the sale money (via estate agent) goes to Central revenue service)

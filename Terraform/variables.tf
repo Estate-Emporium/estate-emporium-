@@ -69,5 +69,5 @@ variable "db_port" {
 variable "eb_port_server" {
   type        = number
   description = "The port for the eb frontend."
-  default     = 5000
+  default     = 80
 }
