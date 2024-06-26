@@ -56,13 +56,30 @@ resource "aws_cloudfront_origin_access_identity" "oai" {
   comment = "OAI for my S3 static website"
 }
 
+resource "aws_s3_bucket_cors_configuration" "website_cors" {
+  bucket = aws_s3_bucket.website_bucket.bucket
+
+  cors_rule {
+    allowed_methods = ["GET"]
+    allowed_origins = [aws_s3_bucket_website_configuration.web_config.website_endpoint]
+    max_age_seconds = 3000
+  }
+}
+
 # resource "aws_cloudfront_distribution" "s3_distribution" {
 #   origin {
 #     domain_name = aws_s3_bucket.website_bucket.bucket_regional_domain_name
-#     origin_id   = "s3-web-origin"
+#     origin_id   = aws_s3_bucket.website_bucket.bucket
 
-#     s3_origin_config {
-#       origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
+#     # s3_origin_config {
+#     #   origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
+#     # }
+
+#     custom_origin_config {
+#       http_port              = 80
+#       https_port             = 443
+#       origin_protocol_policy = "http-only"
+#       origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
 #     }
 #   }
 
@@ -74,13 +91,13 @@ resource "aws_cloudfront_origin_access_identity" "oai" {
 #   default_cache_behavior {
 #     allowed_methods  = ["GET", "HEAD"]
 #     cached_methods   = ["GET", "HEAD"]
-#     target_origin_id = "s3-web-origin"
+#     target_origin_id = aws_s3_bucket.website_bucket.bucket
 
 #     forwarded_values {
-#       query_string = true
+#       query_string = false
 
 #       cookies {
-#         forward = "all"
+#         forward = "none"
 #       }
 #     }
 
@@ -98,8 +115,15 @@ resource "aws_cloudfront_origin_access_identity" "oai" {
 #   }
 
 #   viewer_certificate {
-#     cloudfront_default_certificate = true
+#     # cloudfront_default_certificate = true
+#     acm_certificate_arn      = "arn:aws:acm:eu-west-1:387198229710:certificate/880e5535-147d-445d-a2a2-db1c3d24d93e"
+#     ssl_support_method       = "sni-only"
+#     minimum_protocol_version = "TLSv1.2_2018"
 #   }
+
+#   price_class = "PriceClass_100"
+
+#   aliases = ["estate-emporium.projects.bbdgrad.com"]
 
 #   # web_acl_id = aws_wafv2_web_acl.waf_acl.id
 # }
