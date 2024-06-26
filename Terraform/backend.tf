@@ -104,19 +104,19 @@ resource "aws_elastic_beanstalk_environment" "server_env" {
   # }
 
   setting {
-    namespace = "aws:elbv2:listener:80"
+    namespace = "aws:elbv2:listener:5000"
     name      = "DefaultProcess"
     value     = "default"
   }
 
   setting {
-    namespace = "aws:elbv2:listener:80"
+    namespace = "aws:elbv2:listener:5000"
     name      = "Protocol"
     value     = "HTTP"
   }
 
   setting {
-    namespace = "aws:elbv2:listener:80"
+    namespace = "aws:elbv2:listener:5000"
     name      = "ListenerEnabled"
     value     = "true"
   }
