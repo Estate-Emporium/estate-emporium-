@@ -7,6 +7,10 @@ on:
       - 'Terraform/**'
       - '.github/workflows/aws-setup.yml'
   workflow_dispatch:
+
+concurrency:
+  group: workflow-group
+  cancel-in-progress: false
     
 permissions:
   id-token: write # This is required for aws oidc connection
