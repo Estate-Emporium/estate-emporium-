@@ -3,9 +3,9 @@ mandatory_tags = {
   created-using = "terraform"
 }
 
-account_number = ""
+account_number = "387198229710"
 
-repo = "Estate-Emporium/estate-emporium-"
+repo = "Estate-Emporium/estate-emporium"
 
 region = "eu-west-1"
 
