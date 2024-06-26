@@ -1,14 +1,137 @@
-# State bucket for storing and sharing terraform state
-terraform {
-  backend "s3" {
-    bucket  = "estate-emporium-state-12"
-    key     = "terraform-state/terraform.tfstate"
-    region  = "eu-west-1"
-    encrypt = true
+resource "aws_s3_bucket" "server_release_bucket" {
+  bucket = "${var.project_name}-server-bucket"
+  tags   = merge(var.mandatory_tags, { Name = "${var.project_name}-server-bucket" })
+}
+
+resource "aws_s3_bucket_versioning" "bucket_versioning" {
+  bucket = aws_s3_bucket.server_release_bucket.id
+  versioning_configuration {
+    status = "Enabled"
   }
 }
 
-resource "aws_s3_bucket" "state_bucket" {
-  bucket = "${var.project_name}-state-12" # Change to your unique bucket name
-  tags   = merge(var.mandatory_tags, { Name = "${var.project_name}-state-12" })
+resource "aws_elastic_beanstalk_application" "server_app" {
+  name        = "${var.project_name}-api"
+  description = "Beanstalk application"
+}
+
+resource "aws_elastic_beanstalk_environment" "server_env" {
+  name                = "${var.project_name}-api"
+  application         = aws_elastic_beanstalk_application.server_app.name
+  solution_stack_name = "64bit Amazon Linux 2023 v4.3.3 running Docker"
+  cname_prefix        = "${var.project_name}-api"
+
+  setting {
+    namespace = "aws:ec2:vpc"
+    name      = "VPCId"
+    value     = aws_vpc.vpc.id
+  }
+  setting {
+    namespace = "aws:ec2:vpc"
+    name      = "Subnets"
+    value     = join(",", aws_subnet.private_subnets[*].id)
+  }
+  setting {
+    namespace = "aws:ec2:vpc"
+    name      = "ELBSubnets"
+    value     = join(",", aws_subnet.public_subnets[*].id)
+  }
+  setting {
+    namespace = "aws:ec2:instances"
+    name      = "InstanceTypes"
+    value     = "t3.micro"
+  }
+  # setting {
+  #   namespace = "aws:ec2:vpc"
+  #   name      = "AssociatePublicIpAddress"
+  #   value     = true
+  # }
+  setting {
+    namespace = "aws:autoscaling:asg"
+    name      = "MaxSize"
+    value     = "2"
+  }
+
+  setting {
+    namespace = "aws:elbv2:loadbalancer"
+    name      = "IdleTimeout"
+    value     = "60"
+  }
+  setting {
+    namespace = "aws:autoscaling:launchconfiguration"
+    name      = "IamInstanceProfile"
+    value     = aws_iam_instance_profile.ec2_instance_profile.name
+  }
+  setting {
+    namespace = "aws:autoscaling:launchconfiguration"
+    name      = "SecurityGroups"
+    value     = aws_security_group.eb_security_group_web.id
+  }
+  setting {
+    namespace = "aws:elasticbeanstalk:environment"
+    name      = "LoadBalancerType"
+    value     = "application"
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:environment"
+    name      = "ServiceRole"
+    value     = aws_iam_role.eb_service_role.name
+  }
+
+  setting {
+    namespace = "aws:elasticbeanstalk:healthreporting:system"
+    name      = "SystemType"
+    value     = "basic"
+  }
+
+  # setting {
+  #   namespace = "aws:elbv2:listener:443"
+  #   name      = "Protocol"
+  #   value     = "HTTPS"
+  # }
+
+  # setting {
+  #   namespace = "aws:elbv2:listener:443"
+  #   name      = "ListenerEnabled"
+  #   value     = "true"
+  # }
+
+  setting {
+    namespace = "aws:elbv2:listener:80"
+    name      = "DefaultProcess"
+    value     = "default"
+  }
+
+  setting {
+    namespace = "aws:elbv2:listener:80"
+    name      = "Protocol"
+    value     = "HTTP"
+  }
+
+  setting {
+    namespace = "aws:elbv2:listener:80"
+    name      = "ListenerEnabled"
+    value     = "true"
+  }
+
+  setting {
+    namespace = "aws:elbv2:loadbalancer"
+    name      = "SecurityGroups"
+    value     = aws_security_group.eb_security_group_lb.id
+  }
+
+  # setting {
+  #   namespace = "aws:elbv2:listener:443"
+  #   name      = "SSLCertificateArns"
+  #   value     = "arn:aws:acm:eu-west-1:574836245203:certificate/51456bea-3d96-4f9d-a893-904c29d58afe" # Replace with your SSL certificate ARN
+  # }
+
+  # Optional: redirect HTTP to HTTPS
+  # setting {
+  #   namespace = "aws:elbv2:listener:80"
+  #   name      = "Rules"
+  #   value     = "path-pattern / -> forward: 443, path-pattern /* -> redirect: https://rudolph-sucks.projects.bbdgrad.com#{path}?#{query}"
+  # }
+
 }
