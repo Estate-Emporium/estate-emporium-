@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - 'terraform/**'
+      - 'Terraform/**'
       - '.github/workflows/aws-setup.yml'
   workflow_dispatch:
     
@@ -42,30 +42,30 @@ jobs:
         - name: Terraform fmt
           id: fmt
           run: |
-              cd terraform
+              cd Terraform
               terraform fmt -check
           continue-on-error: true
     
         - name: Terraform Init
           id: init
           run: |
-            cd terraform
+            cd Terraform
             terraform init
     
         - name: Terraform Validate
           id: validate
           run: | 
-            cd  terraform
+            cd  Terraform
             terraform validate -no-color
     
         - name: Terraform Plan
           id: plan
           run: |
-            cd terraform
+            cd Terraform
             terraform plan -no-color
 
         - name: Terraform Apply
           run: |
-            cd terraform
+            cd Terraform
             terraform apply -auto-approve -input=false  
               

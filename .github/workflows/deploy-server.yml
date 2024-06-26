@@ -35,11 +35,11 @@ jobs:
       - name: Build and Publish API
         run: |
             cd Backend/ToDoApi 
-            dotnet publish -c Release -o ../releases
+            dotnet publish -c Release -o ../Releases
 
       - name: Generate .env
         run: |
-            cd Backend/releases
+            cd Backend/Releases
             echo "SERVER_PORT"=${{ secrets.SERVER_PORT }} > .env 
             echo "MODE=production" >> .env
             echo "DB_USERNAME=${{ secrets.DB_USERNAME}}" >> .env
@@ -50,16 +50,16 @@ jobs:
 
       - name: Package artifact
         run: zip -r ./server.zip .env .dockerignore *
-        working-directory: Backend/releases
+        working-directory: Backend/Releases
 
       - name: list files
         run: |
-            cd Backend/releases
+            cd Backend/Releases
             ls -la
             
       - name: Upload artifact to S3
         run: |
-          cd Backend/releases
+          cd Backend/Releases
           aws s3 cp server.zip s3://${{ secrets.SERVER_RELEASE_BUCKET_NAME }}/application-${{ github.run_id }}.zip
 
   deploy:
