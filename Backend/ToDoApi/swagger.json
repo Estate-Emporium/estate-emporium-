@@ -1,0 +1,235 @@
+﻿{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "My API",
+    "version": "v1"
+  },
+  "paths": {
+    "/api/buy": {
+      "post": {
+        "tags": [
+          "Property"
+        ],
+        "summary": "Initiates the purchase of a house.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PurchaseModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PurchaseModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PurchaseModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/sell": {
+      "put": {
+        "tags": [
+          "Property"
+        ],
+        "summary": "Lists a house for sale.",
+        "requestBody": {
+          "description": "The Persona ID of the seller.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/loan/update": {
+      "put": {
+        "tags": [
+          "Property"
+        ],
+        "summary": "Approves or denies a loan for a house purchase.",
+        "requestBody": {
+          "description": "The model containing the personID, houseID, and approval status.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoanApprovalModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoanApprovalModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoanApprovalModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LoanApprovalModel": {
+        "required": [
+          "houseId",
+          "isApproved",
+          "personId"
+        ],
+        "type": "object",
+        "properties": {
+          "personId": {
+            "type": "integer",
+            "description": "Persona ID of the person.",
+            "format": "int64",
+            "example": 123456789
+          },
+          "houseId": {
+            "type": "integer",
+            "description": "House ID for which the loan is being updated.",
+            "format": "int64",
+            "example": 987654321
+          },
+          "isApproved": {
+            "type": "boolean",
+            "description": "Indicates if the loan was approved or denied.",
+            "example": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Model representing the data required to update a loan's approval status."
+      },
+      "PurchaseModel": {
+        "required": [
+          "buyerId",
+          "numUnits"
+        ],
+        "type": "object",
+        "properties": {
+          "buyerId": {
+            "type": "integer",
+            "description": "Persona ID of the buyer.",
+            "format": "int64",
+            "example": 123456789
+          },
+          "numUnits": {
+            "type": "integer",
+            "description": "Number of units required 1 to 8",
+            "format": "int32",
+            "example": 3
+          }
+        },
+        "additionalProperties": false,
+        "description": "Model representing the data required to initiate a house purchase."
+      }
+    }
+  }
+}
