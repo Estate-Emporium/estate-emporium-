@@ -5,7 +5,7 @@ mandatory_tags = {
 
 account_number = ""
 
-repo = "Estate-Emporium/estate-emporium"
+repo = "Estate-Emporium/estate-emporium-"
 
 region = "eu-west-1"
 
