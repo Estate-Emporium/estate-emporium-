@@ -1,4 +1,4 @@
-﻿namespace ToDoApi.Models
+﻿namespace estate_emporium.Models
 {
     public class TodoItem
     {

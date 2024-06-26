@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ToDoApi.Models;
+using estate_emporium.Models;
 
-namespace TodoApi.Models
+namespace estate_emporium.Models
 {
     public class TodoContext : DbContext
     {

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using TodoApi.Models;
+using estate_emporium.Models;
 using System.Linq;
 
-namespace ToDoApi.Controllers
+namespace estate_emporium.Controllers
 {
     [Route("api/Todo")]
     [ApiExplorerSettings(IgnoreApi = true)] //used to hide from swagger, can be applied to entire controller ot jsut 1 endpoint
