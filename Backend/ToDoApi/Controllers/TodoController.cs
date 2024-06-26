@@ -6,6 +6,7 @@ using System.Linq;
 namespace ToDoApi.Controllers
 {
     [Route("api/Todo")]
+    [ApiExplorerSettings(IgnoreApi = true)] //used to hide from swagger, can be applied to entire controller ot jsut 1 endpoint
     public class TodoController : Controller
     {
         private readonly TodoContext _todoContext;
