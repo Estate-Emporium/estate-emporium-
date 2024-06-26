@@ -15,9 +15,16 @@ Estate Emporium
 
 ## Run-instructions
 
-### Running local docker testing environment
+### Running server
 ```
-Enter run instructions here
+cd backend/estate-emporium
+dotnet run
+open localhost:80
+```
+
+### Running server
+```
+open index.html
 ```
 
 ## Access the database using MS SQL Server studio
