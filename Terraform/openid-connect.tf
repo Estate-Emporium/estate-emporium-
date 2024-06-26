@@ -66,3 +66,13 @@ resource "aws_iam_role_policy_attachment" "github_action_role_attachment_eb" {
   role       = aws_iam_role.github_action_role.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk"
 }
+
+resource "aws_iam_role_policy_attachment" "github_action_role_attachment_waf" {
+  role       = aws_iam_role.github_action_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSWAFFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "github_action_role_attachment_cloudfront" {
+  role       = aws_iam_role.github_action_role.name
+  policy_arn = "arn:aws:iam::aws:policy/CloudFrontFullAccess"
+}
