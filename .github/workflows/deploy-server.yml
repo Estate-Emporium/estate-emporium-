@@ -1,4 +1,4 @@
-name: Deploy app on port 80
+name: Deploy server
 
 on:
   push:
