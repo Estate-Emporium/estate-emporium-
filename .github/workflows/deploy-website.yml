@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -27,16 +27,7 @@ jobs:
           role-session-name: deploy-frontend-session
           aws-region: ${{secrets.AWS_REGION}}
 
-      - name: Package artifact
-        run: zip -r ./website.zip *
+      - name: Deploy to AWS S3
+        run: aws s3 sync . s3://${{ secrets.WEBSITE_BUCKET_NAME }} --delete
         working-directory: Frontend
-
-      - name: list files
-        run: |
-            cd Frontend
-            ls -la
-            
-      - name: Upload artifact to S3
-        run: |
-          cd Frontend
-          aws s3 cp website.zip s3://${{ secrets.WEBSITE_BUCKET_NAME }}/application-${{ github.run_id }}.zip
+        

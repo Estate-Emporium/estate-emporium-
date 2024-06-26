@@ -3,6 +3,13 @@ resource "aws_s3_bucket" "website_bucket" {
   tags   = merge(var.mandatory_tags, { Name = "${var.project_name}-website" })
 }
 
+resource "aws_s3_bucket_versioning" "source_versioning" {
+  bucket = aws_s3_bucket.website_bucket.bucket
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
 resource "aws_s3_bucket_website_configuration" "web_config" {
   bucket = aws_s3_bucket.website_bucket.id
 
@@ -15,8 +22,7 @@ resource "aws_s3_bucket_website_configuration" "web_config" {
 }
 
 resource "aws_s3_bucket_public_access_block" "bucket_access_block" {
-  bucket = aws_s3_bucket.website_bucket.id
-
+  bucket              = aws_s3_bucket.website_bucket.id
   block_public_acls   = false # Change to true because oaic
   block_public_policy = false
 }
