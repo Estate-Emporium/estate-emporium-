@@ -34,7 +34,7 @@ jobs:
     
       - name: Build and Publish API
         run: |
-            cd Backend/ToDoApi 
+            cd Backend/estate-emporium 
             dotnet publish -c Release -o ../Releases
 
       - name: Generate .env

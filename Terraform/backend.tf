@@ -85,6 +85,12 @@ resource "aws_elastic_beanstalk_environment" "server_env" {
     value     = "basic"
   }
 
+  setting {
+    namespace = "aws:elasticbeanstalk:environment:process:default"
+    name      = "HealthCheckPath"
+    value     = "/health"
+  }
+
   # setting {
   #   namespace = "aws:elbv2:listener:443"
   #   name      = "Protocol"

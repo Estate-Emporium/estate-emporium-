@@ -76,3 +76,13 @@ resource "aws_iam_role_policy_attachment" "github_action_role_attachment_cloudfr
   role       = aws_iam_role.github_action_role.name
   policy_arn = "arn:aws:iam::aws:policy/CloudFrontFullAccess"
 }
+
+resource "aws_iam_role_policy_attachment" "github_action_role_attachment_cognito" {
+  role       = aws_iam_role.github_action_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonCognitoPowerUser"
+}
+
+resource "aws_iam_role_policy_attachment" "github_action_role_attachment_sns" {
+  role       = aws_iam_role.github_action_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
+}
