@@ -5,10 +5,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
 using estate_emporium;
-using estate_emporium.Models;
+
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Options;
 using DotNetEnv;
+using estate_emporium.Models;
+using estate_emporium.Utils;
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 DotNetEnv.Env.Load();
@@ -38,8 +40,8 @@ builder.Services.AddSwaggerGen(options =>
   options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
+builder.Services.AddDbContext<EstateDbContext>(options => options.UseSqlServer(DbUtils.getConnectionString()));
 
-builder.Services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
 builder.Services.AddMvc();
 
 var app = builder.Build();

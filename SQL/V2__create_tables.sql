@@ -2,7 +2,7 @@ USE EstateEmporium;
 GO
 
 CREATE TABLE [PropertySales] (
-  [SaleID]  bigint IDENTITY(1,1) PRIMARY KEY,,
+  [SaleID] bigint IDENTITY(1,1) PRIMARY KEY,
   [BuyerID] bigint NOT NULL,
   [SellerID] bigint NOT NULL,
   [PropertyID] bigint NOT NULL,
