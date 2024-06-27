@@ -22,9 +22,19 @@ dotnet run
 open localhost:80
 ```
 
-### Running server
+### Running frontend
 ```
-open index.html
+cd frontend
+npm install
+npm run dev
+```
+
+### Running static build
+```
+cd frontend
+npm install
+npm run build
+npm run preview
 ```
 
 ## Access the database using MS SQL Server studio
