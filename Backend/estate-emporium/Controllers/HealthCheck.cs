@@ -13,6 +13,7 @@ namespace estate_emporium.Controllers
     {
       return new JsonResult("Health OK") { StatusCode = 200 };
     }
+
     [HttpGet]
     [Route("env")]
     public IActionResult TestEnv()
@@ -25,16 +26,16 @@ namespace estate_emporium.Controllers
     [Route("db")]
     public IActionResult TestDb()
     {
-        try
-        {
-            var test = _dbContext.Statuses.Select(x => x.StatusName).ToList();
-            return new ObjectResult(test);
-        }
-        catch
-        {
-            return BadRequest("DB CONNECT FAIL");
-        }
+      try
+      {
+        var test = _dbContext.Statuses.Select(x => x.StatusName).ToList();
+        return new ObjectResult(test);
+      }
+      catch
+      {
+        return BadRequest("DB CONNECT FAIL");
+      }
 
     }
-    }
+  }
 }

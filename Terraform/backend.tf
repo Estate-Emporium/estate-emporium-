@@ -91,17 +91,17 @@ resource "aws_elastic_beanstalk_environment" "server_env" {
     value     = "/health"
   }
 
-  # setting {
-  #   namespace = "aws:elbv2:listener:443"
-  #   name      = "Protocol"
-  #   value     = "HTTPS"
-  # }
+  setting {
+    namespace = "aws:elbv2:listener:443"
+    name      = "Protocol"
+    value     = "HTTPS"
+  }
 
-  # setting {
-  #   namespace = "aws:elbv2:listener:443"
-  #   name      = "ListenerEnabled"
-  #   value     = "true"
-  # }
+  setting {
+    namespace = "aws:elbv2:listener:443"
+    name      = "ListenerEnabled"
+    value     = "true"
+  }
 
   setting {
     namespace = "aws:elbv2:listener:80"
@@ -127,17 +127,23 @@ resource "aws_elastic_beanstalk_environment" "server_env" {
     value     = aws_security_group.eb_security_group_lb.id
   }
 
-  # setting {
-  #   namespace = "aws:elbv2:listener:443"
-  #   name      = "SSLCertificateArns"
-  #   value     = "arn:aws:acm:eu-west-1:574836245203:certificate/51456bea-3d96-4f9d-a893-904c29d58afe" # Replace with your SSL certificate ARN
-  # }
+  setting {
+    namespace = "aws:elbv2:listener:443"
+    name      = "SSLCertificateArns"
+    value     = "arn:aws:acm:eu-west-1:387198229710:certificate/cea7404e-5990-47b8-8735-06d666dd39e6" # Replace with your SSL certificate ARN
+  }
 
   # Optional: redirect HTTP to HTTPS
   # setting {
   #   namespace = "aws:elbv2:listener:80"
   #   name      = "Rules"
-  #   value     = "path-pattern / -> forward: 443, path-pattern /* -> redirect: https://rudolph-sucks.projects.bbdgrad.com#{path}?#{query}"
+  #   value     = "Redirect HTTP to HTTPS"
+  # }
+
+  # setting {
+  #   namespace = "aws:elbv2:listener:Redirect HTTP to HTTPS"
+  #   name      = "Rules"
+  #   value     = "path-pattern /* -> redirect: HTTPS://#{host}:443/#{path}?#{query}"
   # }
 
 }
