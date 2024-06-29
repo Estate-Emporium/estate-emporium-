@@ -15,21 +15,17 @@ namespace estate_emporium.Controllers
     }
 
     [HttpGet]
-    [Route("env")]
-    public IActionResult TestEnv()
-    {
-      var testEnv = System.Environment.GetEnvironmentVariable("ENV_WORKING") ?? "FALSE";
-      return new ObjectResult(testEnv);
-    }
-
-    [HttpGet]
     [Route("db")]
     public IActionResult TestDb()
     {
       try
       {
         var test = _dbContext.Statuses.Select(x => x.StatusName).ToList();
-        return new ObjectResult(test);
+        if (test.Any())
+        {
+          return new ObjectResult(test);
+        }
+        else return BadRequest("USING IN MEMORY DB");
       }
       catch
       {
