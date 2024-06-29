@@ -40,7 +40,7 @@ builder.Services.AddSwaggerGen(options =>
   options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddDbContext<EstateDbContext>(options => options.UseSqlServer(DbUtils.getConnectionString()));
+DbUtils.initDB(builder);
 
 builder.Services.AddMvc();
 
