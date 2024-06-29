@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using estate_emporium.Models;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
@@ -22,28 +23,12 @@ namespace estate_emporium.Controllers
         {
             // Your code logic here
 
+            // 1. call property manager to get home price
+
+            //2. call home loan
             return new JsonResult("Purchase Successful");
         }
 
-        /// <summary>
-        /// Model representing the data required to initiate a house purchase.
-        /// </summary>
-        public class PurchaseModel
-        {
-            /// <summary>
-            /// Persona ID of the buyer.
-            /// </summary>
-            /// <example>123456789</example>
-            [Required]
-            public ulong BuyerId { get; set; }
-
-            /// <summary>
-            /// Number of units required 1 to 8
-            /// </summary>
-            /// <example>3</example>
-            [Required]
-            public int NumUnits { get; set; }
-        }
         /// <summary>
         /// Lists a house for sale.
         /// </summary>
@@ -75,33 +60,6 @@ namespace estate_emporium.Controllers
             // Your code logic to update the loan status
 
             return new JsonResult($"Loan status updated: {(loanApprovalModel.IsApproved ? "Approved" : "Denied")}");
-        }
-
-        /// <summary>
-        /// Model representing the data required to update a loan's approval status.
-        /// </summary>
-        public class LoanApprovalModel
-        {
-            /// <summary>
-            /// Persona ID of the person.
-            /// </summary>
-            /// <example>123456789</example>
-            [Required]
-            public ulong PersonId { get; set; }
-
-            /// <summary>
-            /// House ID for which the loan is being updated.
-            /// </summary>
-            /// <example>987654321</example>
-            [Required]
-            public long HouseId { get; set; }
-
-            /// <summary>
-            /// Indicates if the loan was approved or denied.
-            /// </summary>
-            /// <example>true</example>
-            [Required]
-            public bool IsApproved { get; set; }
         }
     }
 }
