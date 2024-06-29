@@ -1,4 +1,5 @@
 ﻿using estate_emporium.Models;
+using estate_emporium.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
@@ -8,8 +9,9 @@ namespace estate_emporium.Controllers
 {
     [Route("api")]
 
-    public class PropertyController : Controller
+    public class PropertyController(PropertyManagerService propertyManagerService) : Controller
     {
+        PropertyManagerService _propertyManagerService=propertyManagerService;
         /// <summary>
         /// Initiates the purchase of a house.
         /// </summary>
@@ -19,14 +21,14 @@ namespace estate_emporium.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult Purchase([FromBody] PurchaseModel purchaseModel)
+        public async Task<IActionResult> Purchase([FromBody] PurchaseModel purchaseModel)
         {
             // Your code logic here
 
             // 1. call property manager to get home price
-
+             await _propertyManagerService.GetProperty(purchaseModel);
             //2. call home loan
-            return new JsonResult("Purchase Successful");
+            return Ok("Purchase Successful");
         }
 
         /// <summary>

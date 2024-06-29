@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using DotNetEnv;
 using estate_emporium.Models;
 using estate_emporium.Utils;
+using estate_emporium.Services;
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 DotNetEnv.Env.Load();
@@ -43,6 +44,21 @@ builder.Services.AddSwaggerGen(options =>
 DbUtils.initDB(builder);
 
 builder.Services.AddMvc();
+
+builder.Services.AddHttpClient(nameof(HttpClientEnum.property_manager), httpClient =>
+{
+    httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("property_URL"));
+    httpClient.DefaultRequestHeaders.Add("User-Agent", "real_estate_sales");
+
+}).AddPolicyHandler(PollyUtils.GetRetryPolicy());
+builder.Services.AddHttpClient(nameof(HttpClientEnum.home_loans), httpClient =>
+{
+    httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("home_loans_URL"));
+    httpClient.DefaultRequestHeaders.Add("User-Agent", "real_estate_sales");
+
+}).AddPolicyHandler(PollyUtils.GetRetryPolicy());
+
+builder.Services.AddScoped<PropertyManagerService>();
 
 var app = builder.Build();
 
