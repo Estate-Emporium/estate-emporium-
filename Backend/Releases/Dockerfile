@@ -4,4 +4,4 @@ WORKDIR /server
 COPY . .
 EXPOSE 80
 ENV ASPNETCORE_URLS=http://*:80
-ENTRYPOINT ["dotnet", "estate-emporium.dll"] #Change to name of actual backend
+ENTRYPOINT ["dotnet", "estate_emporium.dll"] #Change to name of actual backend
