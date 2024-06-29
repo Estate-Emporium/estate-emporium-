@@ -23,12 +23,10 @@ namespace estate_emporium.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Purchase([FromBody] PurchaseModel purchaseModel)
         {
-            // Your code logic here
-
             // 1. call property manager to get home price
-             await _propertyManagerService.GetProperty(purchaseModel);
+            var propertyModel= await _propertyManagerService.GetProperty(purchaseModel);
             //2. call home loan
-            return Ok("Purchase Successful");
+            return Ok(propertyModel);
         }
 
         /// <summary>

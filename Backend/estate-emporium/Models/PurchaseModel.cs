@@ -12,13 +12,14 @@ namespace estate_emporium.Models
         /// </summary>
         /// <example>123456789</example>
         [Required]
-        public ulong BuyerId { get; set; }
+        public ulong? BuyerId { get; set; }
 
         /// <summary>
         /// Number of units required 1 to 8
         /// </summary>
         /// <example>3</example>
         [Required]
-        public int NumUnits { get; set; }
+        [Range(1, 8, ErrorMessage = "The value of the house units must be from 1 to 8.")]
+        public int? NumUnits { get; set; }
     }
 }
