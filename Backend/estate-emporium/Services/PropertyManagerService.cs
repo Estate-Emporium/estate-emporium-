@@ -2,11 +2,14 @@
 
 namespace estate_emporium.Services
 {
-    public class PropertyManagerService(IHttpClientFactory httpClientFactory)
+    public class PropertyManagerService(IHttpClientFactory httpClientFactory, DbService dbService)
 {
         private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
+        private readonly DbService _dbService = dbService;
         public async Task<GetPropertyResponseModel> GetProperty(PurchaseModel purchaseModel)
         {
+            await _dbService.initPropertySaleAsync(purchaseModel);
+
             var client = _httpClientFactory.CreateClient(nameof(HttpClientEnum.property_manager));
             var getProperty = new GetPropertyModel { size = (int)purchaseModel.NumUnits };
 
@@ -14,6 +17,8 @@ namespace estate_emporium.Services
             if (response.IsSuccessStatusCode)
             {
                 var propertyResponse = await response.Content.ReadFromJsonAsync<GetPropertyResponseModel>();
+                await _dbService.updateWithPropertyResponse(purchaseModel, propertyResponse);
+                var result = _dbService.getAllSales();
                 return propertyResponse;
             }
             else

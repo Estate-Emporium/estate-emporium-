@@ -9,7 +9,7 @@ namespace estate_emporium.Models
         /// </summary>
         /// <example>3</example>
         [Required]
-        public float price { get; set; }
+        public long price { get; set; }
         /// <summary>
         /// property ID
         /// </summary>
