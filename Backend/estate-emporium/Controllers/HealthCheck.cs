@@ -18,20 +18,20 @@ namespace estate_emporium.Controllers
     [Route("db")]
     public IActionResult TestDb()
     {
-        try
+      try
+      {
+        var test = _dbContext.Statuses.Select(x => x.StatusName).ToList();
+        if (test.Any())
         {
-            var test = _dbContext.Statuses.Select(x => x.StatusName).ToList();
-                if (test.Any())
-                {
-                    return new ObjectResult(test);
-                }
-                else return BadRequest("USING IN MEMORY DB");
-            }
-        catch
-        {
-            return BadRequest("DB CONNECT FAIL");
+          return new ObjectResult(test);
         }
+        else return BadRequest("USING IN MEMORY DB");
+      }
+      catch
+      {
+        return BadRequest("DB CONNECT FAIL");
+      }
 
     }
-    }
+  }
 }
