@@ -44,6 +44,11 @@ namespace estate_emporium.Services
                 propertyId = thisSale.PropertyId,
                 sellerId = thisSale.SellerId
             };
+
+            if (!isSuccessful ) { thisSale.StatusId = -1; }
+            else { thisSale.StatusId++; }
+            await _dbService.saveChangesAsync();
+
             var response = await client.PutAsJsonAsync("PropertyManager/Approval", complete);
             if(response.IsSuccessStatusCode) { Console.WriteLine("Purchase completed"); }
             else
