@@ -1,4 +1,5 @@
 ﻿using estate_emporium.Models;
+using estate_emporium.Models.HomeLoans;
 using estate_emporium.Services;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -9,9 +10,10 @@ namespace estate_emporium.Controllers
 {
     [Route("api")]
 
-    public class PropertyController(PropertyManagerService propertyManagerService) : Controller
+    public class PropertyController(PropertyManagerService propertyManagerService, LoanService loanService) : Controller
     {
         PropertyManagerService _propertyManagerService=propertyManagerService;
+        LoanService _loanService=loanService;   
         /// <summary>
         /// Initiates the purchase of a house.
         /// </summary>
@@ -23,10 +25,36 @@ namespace estate_emporium.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Purchase([FromBody] PurchaseModel purchaseModel)
         {
-            // 1. call property manager to get home price
-            var propertyModel= await _propertyManagerService.GetProperty(purchaseModel);
-            //2. call home loan
-            return Ok(propertyModel);
+            try
+            {
+            
+                var saleId = await _propertyManagerService.GetProperty(purchaseModel);
+                if (saleId == null) { 
+                    throw new Exception("Dependency failed: No property availible"); 
+                }
+                else
+                {
+                    //let this call happen in the background to not keep persona waiting
+                    //if this fails, we will call persona and property maanger on their failure endpoints to let them know
+                   
+                        var thisSaleId = (long)saleId;
+                        try
+                        {
+                            await _loanService.submitLoanApplicationAsync(thisSaleId);
+                        }
+                        catch (Exception ex)
+                        {
+                            await _propertyManagerService.CompleteSale(thisSaleId, false);
+                        throw new Exception("Dependency failed: Unable to get a homeloan");
+                    }
+                    
+                }
+                return Ok("Request Recieved");
+            }
+            catch (Exception ex) {
+                return StatusCode(424, $"Failed to purchase a home: {ex.Message}");
+            }
+ 
         }
 
         /// <summary>
@@ -43,7 +71,7 @@ namespace estate_emporium.Controllers
         {
             // Your code logic to list the house for sale
 
-            return new JsonResult("House listed for sale successfully");
+            return Ok("Endpoint not yet implemented");
         }
         /// <summary>
         /// Approves or denies a loan for a house purchase.
@@ -59,7 +87,7 @@ namespace estate_emporium.Controllers
         {
             // Your code logic to update the loan status
 
-            return new JsonResult($"Loan status updated: {(loanApprovalModel.IsApproved ? "Approved" : "Denied")}");
+            return Ok("Endpoint not yet implemented but body sent correctly");
         }
     }
 }

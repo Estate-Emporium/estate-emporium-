@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace estate_emporium.Models
+namespace estate_emporium.Models.HomeLoans
 {
     public class LoanApplicationModel
     {
@@ -19,7 +19,7 @@ namespace estate_emporium.Models
         public long HouseId { get; set; }
 
         /// <summary>
-        /// PRice
+        /// Price in cents
         /// </summary>
         /// <example>23232</example>
         [Required]

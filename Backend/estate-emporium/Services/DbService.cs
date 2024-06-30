@@ -1,5 +1,6 @@
 ﻿using estate_emporium.Models;
 using estate_emporium.Models.db;
+using estate_emporium.Models.PropertyManager;
 using Microsoft.EntityFrameworkCore;
 
 namespace estate_emporium.Services
@@ -29,16 +30,27 @@ namespace estate_emporium.Services
         {
             return _dbContext.PropertySales.ToList();
         }
-        public PropertySale getSaleById(long saleId)
+        public async Task<PropertySale> getSaleByIdAsync(long saleId)
         {
-            return _dbContext.PropertySales.Where(s => s.SaleId == saleId).FirstOrDefault();
+            return await _dbContext.PropertySales.Where(s => s.SaleId == saleId).FirstOrDefaultAsync();
         }
         public async Task failSaleAsync(long saleID)
         {
-            var thisSale = await _dbContext.PropertySales.Where(s => s.SaleId == saleID).FirstOrDefaultAsync();
-            thisSale.SaleId = -1;
+            var thisSale = await getSaleByIdAsync(saleID);
+            thisSale.StatusId = -1;
             await _dbContext.SaveChangesAsync();
             //Maybe here try back up the chain to tell everyone else it failed?
+        }
+        public async Task populateHomeLoanId(long saleID, long loanId)
+        {
+            var thisSale = await getSaleByIdAsync(saleID);
+            thisSale.HomeLoanId = loanId;
+            thisSale.StatusId += 1;
+            await _dbContext.SaveChangesAsync();
+        }
+        public async Task saveChangesAsync()
+        {
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
