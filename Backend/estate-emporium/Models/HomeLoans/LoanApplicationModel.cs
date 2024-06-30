@@ -1,11 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace estate_emporium.Models
+namespace estate_emporium.Models.HomeLoans
 {
-    /// <summary>
-    /// Model representing the data required to update a loan's approval status.
-    /// </summary>
-    public class LoanApprovalModel
+    public class LoanApplicationModel
     {
         /// <summary>
         /// Persona ID of the person.
@@ -22,10 +19,11 @@ namespace estate_emporium.Models
         public long HouseId { get; set; }
 
         /// <summary>
-        /// Indicates if the loan was approved or denied.
+        /// Price in cents
         /// </summary>
-        /// <example>true</example>
+        /// <example>23232</example>
         [Required]
-        public bool IsApproved { get; set; }
+        public long Price { get; set; }
+
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace estate_emporium.Models
+namespace estate_emporium.Models.PropertyManager
 {
     public class GetPropertyModel
     {
@@ -11,8 +11,9 @@ namespace estate_emporium.Models
         /// <example>3</example>
         [Required]
         public int size { get; set; }
+
         /// <summary>
-        /// Not for us, should be false
+        /// Not for us, should always be false
         /// </summary>
         /// <example>false </example>
 

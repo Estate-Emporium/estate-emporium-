@@ -16,21 +16,21 @@ public partial class PropertySale
     public long BuyerId { get; set; }
 
     [Column("SellerID")]
-    public long SellerId { get; set; }
+    public long SellerId { get; set; } = -1;
 
     [Column("PropertyID")]
-    public long PropertyId { get; set; }
+    public long PropertyId { get; set; } = -1;
 
-    public long SalePrice { get; set; }
+    public long SalePrice { get; set; } = -1;
 
     [Column("HomeLoanID")]
-    public long HomeLoanId { get; set; }
+    public long HomeLoanId { get; set; } = -1;
 
     [Column(TypeName = "datetime")]
-    public DateTime PurchaseDate { get; set; }
+    public DateTime PurchaseDate { get; set; } = DateTime.Now;
 
     [Column("StatusID")]
-    public int? StatusId { get; set; }
+    public int? StatusId { get; set; } = 0;
 
     [ForeignKey("StatusId")]
     [InverseProperty("PropertySales")]

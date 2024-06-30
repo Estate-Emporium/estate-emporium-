@@ -126,7 +126,7 @@
         ],
         "summary": "Approves or denies a loan for a house purchase.",
         "requestBody": {
-          "description": "The model containing the personID, houseID, and approval status.",
+          "description": "The model containing the loanId, and approval status.",
           "content": {
             "application/json": {
               "schema": {
@@ -180,23 +180,16 @@
     "schemas": {
       "LoanApprovalModel": {
         "required": [
-          "houseId",
           "isApproved",
-          "personId"
+          "loanId"
         ],
         "type": "object",
         "properties": {
-          "personId": {
+          "loanId": {
             "type": "integer",
-            "description": "Persona ID of the person.",
+            "description": "Home loan ID that is approved or denied",
             "format": "int64",
-            "example": 123456789
-          },
-          "houseId": {
-            "type": "integer",
-            "description": "House ID for which the loan is being updated.",
-            "format": "int64",
-            "example": 987654321
+            "example": 43
           },
           "isApproved": {
             "type": "boolean",
@@ -221,6 +214,8 @@
             "example": 123456789
           },
           "numUnits": {
+            "maximum": 8,
+            "minimum": 1,
             "type": "integer",
             "description": "Number of units required 1 to 8",
             "format": "int32",

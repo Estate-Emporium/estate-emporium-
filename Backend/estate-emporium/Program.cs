@@ -61,7 +61,9 @@ builder.Services.AddHttpClient(nameof(HttpClientEnum.home_loans), httpClient =>
 
 }).AddPolicyHandler(PollyUtils.GetRetryPolicy());
 
-builder.Services.AddScoped<PropertyManagerService>();
+//builder.Services.AddScoped<PropertyManagerService>();
+//Add all services in the services namespace to be dependency injected correctly
+builder.Services.AddServicesFromNamespace(Assembly.GetExecutingAssembly(), "estate_emporium.Services");
 
 var app = builder.Build();
 
