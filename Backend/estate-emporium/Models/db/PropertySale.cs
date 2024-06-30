@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace estate_emporium.Models;
+namespace estate_emporium.Models.db;
 
 public partial class PropertySale
 {

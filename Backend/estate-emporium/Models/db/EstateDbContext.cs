@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace estate_emporium.Models;
+namespace estate_emporium.Models.db;
 
 public partial class EstateDbContext : DbContext
 {

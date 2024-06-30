@@ -1,9 +1,9 @@
-﻿using estate_emporium.Models;
+﻿using estate_emporium.Models.db;
 using Microsoft.AspNetCore.Mvc;
 
 namespace estate_emporium.Controllers
 {
-  [Route("health")]
+    [Route("health")]
   [ApiExplorerSettings(IgnoreApi = true)] //used to hide from swagger, can be applied to entire controller ot jsut 1 endpoint
   public class HealthCheck(EstateDbContext dbContext) : Controller
   {

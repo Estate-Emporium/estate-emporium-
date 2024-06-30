@@ -1,4 +1,4 @@
-﻿using estate_emporium.Models;
+﻿using estate_emporium.Models.db;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
