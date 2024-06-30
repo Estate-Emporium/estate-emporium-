@@ -34,9 +34,7 @@ namespace estate_emporium.Controllers
                 }
                 else
                 {
-                    //let this call happen in the background to not keep persona waiting
-                    //if this fails, we will call persona and property maanger on their failure endpoints to let them know
-                   
+                    //TODO: KAN-39 let this call happen in the background to not keep persona waiting
                         var thisSaleId = (long)saleId;
                         try
                         {
