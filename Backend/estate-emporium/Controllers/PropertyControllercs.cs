@@ -76,7 +76,7 @@ namespace estate_emporium.Controllers
         /// <summary>
         /// Approves or denies a loan for a house purchase.
         /// </summary>
-        /// <param name="loanApprovalModel">The model containing the personID, houseID, and approval status.</param>
+        /// <param name="loanApprovalModel">The model containing the loanId, and approval status.</param>
         /// <returns>A response indicating the result of the loan approval operation.</returns>
         [HttpPut]
         [Route("loan/update")]
