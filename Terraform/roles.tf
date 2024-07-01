@@ -72,6 +72,11 @@ resource "aws_iam_role_policy_attachment" "eb_ssm_policy_attachment" {
   role       = aws_iam_role.ec2_instance_role.name
 }
 
+resource "aws_iam_role_policy_attachment" "eb_secrets_manager_policy_attachment" {
+  policy_arn = "arn:aws:iam::aws:policy/SecretsManagerReadWrite"
+  role       = aws_iam_role.ec2_instance_role.name
+}
+
 resource "aws_iam_role" "api_key_role" {
   name = "APIKeyRole"
   assume_role_policy = jsonencode({
