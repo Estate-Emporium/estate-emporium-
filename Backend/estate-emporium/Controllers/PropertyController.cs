@@ -2,6 +2,7 @@
 using estate_emporium.Models.HomeLoans;
 using estate_emporium.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.InteropServices;
@@ -10,10 +11,12 @@ namespace estate_emporium.Controllers
 {
     [Route("api")]
 
-    public class PropertyController(PropertyManagerService propertyManagerService, LoanService loanService) : Controller
+    public class PropertyController(PropertyManagerService propertyManagerService, LoanService loanService, BankService bankService, DbService dbService) : Controller
     {
         PropertyManagerService _propertyManagerService=propertyManagerService;
         LoanService _loanService=loanService;   
+        DbService _dbService=dbService;
+        BankService _bankService=bankService;
         /// <summary>
         /// Initiates the purchase of a house.
         /// </summary>
@@ -81,11 +84,36 @@ namespace estate_emporium.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult UpdateLoanStatus([FromBody] LoanApprovalModel loanApprovalModel)
+        public async Task<IActionResult> UpdateLoanStatusAsync([FromBody] LoanApprovalModel loanApprovalModel)
         {
-            // Your code logic to update the loan status
+           var thisSale=await _dbService.getSalebyLoanId((long)loanApprovalModel.LoanId);
+            if((bool)!loanApprovalModel.IsApproved)
+            {
 
-            return Ok("Endpoint not yet implemented but body sent correctly");
+                await _propertyManagerService.CompleteSale(thisSale.SaleId, false);
+                //TODO call persona to tell them it failed
+            }
+            else
+            {
+                thisSale.StatusId += 1;
+                await _dbService.saveChangesAsync();
+               
+                try
+                {
+                    //Call back to transfer money to us, tax, seller
+                    await _bankService.transferAllMoney(thisSale);
+                    await _propertyManagerService.CompleteSale(thisSale.SaleId, true);
+                    //TODO call persona
+                }
+                catch (Exception ex)
+                {
+                    await _propertyManagerService.CompleteSale(thisSale.SaleId, false);
+                    //TODO call persona to tell them it failed
+                }
+               
+            }
+
+            return Ok("Loan process complete");
         }
     }
 }

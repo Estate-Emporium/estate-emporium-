@@ -1,13 +1,15 @@
 ﻿using estate_emporium.Models;
 using estate_emporium.Models.db;
 using estate_emporium.Models.PropertyManager;
+using estate_emporium.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace estate_emporium.Services
 {
     public class DbService(EstateDbContext dbContext)
     {
-        EstateDbContext _dbContext= dbContext;
+        private readonly EstateDbContext _dbContext = dbContext;
+
         public async Task<long> initPropertySaleAsync(PurchaseModel purchaseModel)
         {
             var newSale = new PropertySale
@@ -22,7 +24,7 @@ namespace estate_emporium.Services
         public async Task updateWithPropertyResponse(long saleID, GetPropertyResponseModel getPropertyResponseModel)
         {
             var thisSale=await _dbContext.PropertySales.Where(s => s.SaleId==saleID).FirstOrDefaultAsync();
-            thisSale.SalePrice = getPropertyResponseModel.price;
+            thisSale.SalePrice = getPropertyResponseModel.price+getPropertyResponseModel.price*Consts.Commission/100;
             thisSale.PropertyId = getPropertyResponseModel.propertyId;
             await _dbContext.SaveChangesAsync();
         }
@@ -41,12 +43,15 @@ namespace estate_emporium.Services
             await _dbContext.SaveChangesAsync();
             //Maybe here try back up the chain to tell everyone else it failed?
         }
-        public async Task populateHomeLoanId(long saleID, long loanId)
+        public async Task populateHomeLoanId(PropertySale thisSale, long loanId)
         {
-            var thisSale = await getSaleByIdAsync(saleID);
             thisSale.HomeLoanId = loanId;
             thisSale.StatusId += 1;
             await _dbContext.SaveChangesAsync();
+        }
+        public async Task<PropertySale> getSalebyLoanId(long loanId)
+        {
+            return await _dbContext.PropertySales.Where(s => s.HomeLoanId == loanId).FirstOrDefaultAsync();
         }
         public async Task saveChangesAsync()
         {
