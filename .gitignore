@@ -1,5 +1,7 @@
 flywaylocal.conf
 
+mtls/
+
 # Local .terraform directories
 **/.terraform/*
 
