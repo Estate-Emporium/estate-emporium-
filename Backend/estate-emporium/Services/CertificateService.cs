@@ -1,14 +1,21 @@
-using Amazon.SecretsManager;
+// using Amazon.Lambda.Core;
 using Amazon.SecretsManager.Model;
-using System.Security.Cryptography.X509Certificates;
+using Amazon.SecretsManager;
+using Amazon;
 using Newtonsoft.Json;
+using System.Security.Cryptography.X509Certificates;
 
 namespace estate_emporium.Services
 {
-  public class CertificateService()
+  public class CertificateService
   {
-    private static readonly string secretName = "Certificate_PFX"; //name of your secret 
+    private static readonly string secretName = "Certificate2_PFX";
     private readonly IAmazonSecretsManager secretsManagerClient;
+
+    public CertificateService()
+    {
+      secretsManagerClient = new AmazonSecretsManagerClient(RegionEndpoint.EUWest1);
+    }
 
     public async Task<X509Certificate2> GetCertAndKey()
     {
@@ -18,18 +25,23 @@ namespace estate_emporium.Services
         VersionStage = "AWSCURRENT",
       };
 
-      GetSecretValueResponse response = await secretsManagerClient.GetSecretValueAsync(request);
+      GetSecretValueResponse resp = new GetSecretValueResponse();
 
-      var secretObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.SecretString);
+      try
+      {
+        resp = await secretsManagerClient.GetSecretValueAsync(request);
+      }
+      catch (Exception ex)
+      {
+      }
 
+      var secretObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(resp.SecretString);
 
       if (secretObject.TryGetValue("pfx", out string pfxBase64) && secretObject.TryGetValue("password", out string password))
       {
         // Decode base64 string to byte array
         byte[] pfxBytes = Convert.FromBase64String(pfxBase64);
-
         X509Certificate2 cert = new X509Certificate2(pfxBytes, password);
-
         return cert;
       }
       else

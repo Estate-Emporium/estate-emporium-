@@ -19,14 +19,14 @@ namespace estate_emporium.Controllers
 
     [HttpGet]
     [Route("cert")]
-    public IActionResult TestCert()
+    public async Task<IActionResult> TestCert()
     {
       try
       {
-        var cert = _certService.GetCertAndKey();
+        var cert = await _certService.GetCertAndKey();
         if (cert != null)
         {
-          return new ObjectResult(cert);
+          return new ObjectResult(cert.ToString());
         }
         else return BadRequest("CERT FAIL");
       }
@@ -34,7 +34,6 @@ namespace estate_emporium.Controllers
       {
         return BadRequest("CERT FAIL");
       }
-
     }
 
     [HttpGet]
