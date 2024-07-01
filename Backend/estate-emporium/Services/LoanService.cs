@@ -23,9 +23,7 @@ namespace estate_emporium.Services
             if (response.IsSuccessStatusCode)
             {
                 long homeLoanId = await response.Content.ReadFromJsonAsync <long>();
-                thisSale.HomeLoanId = homeLoanId;
-                thisSale.StatusId++;
-                await _dbService.saveChangesAsync(); 
+                await _dbService.populateHomeLoanId(thisSale, homeLoanId); 
             }
             else
             {
