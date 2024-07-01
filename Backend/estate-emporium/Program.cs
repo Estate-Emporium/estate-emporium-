@@ -47,7 +47,6 @@ builder.Services.AddSwaggerGen(options =>
 DbUtils.initDB(builder);
 
 builder.Services.AddMvc();
-builder.Services.aws
 
 builder.Services.AddHttpClient(nameof(HttpClientEnum.property_manager), httpClient =>
 {
