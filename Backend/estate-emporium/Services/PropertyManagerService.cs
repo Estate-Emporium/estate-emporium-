@@ -19,8 +19,6 @@ namespace estate_emporium.Services
             {
                 var propertyResponse = await response.Content.ReadFromJsonAsync<GetPropertyResponseModel>();
                 await _dbService.updateWithPropertyResponse(saleId, propertyResponse);
-                var result = _dbService.getAllSales();
-                Console.WriteLine(result);
                 return saleId;
             }
             else
