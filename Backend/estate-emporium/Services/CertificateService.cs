@@ -18,8 +18,6 @@ namespace estate_emporium.Services
         VersionStage = "AWSCURRENT",
       };
 
-      var secretsManagerClient = new AmazonSecretsManagerClient();
-
       GetSecretValueResponse response = await secretsManagerClient.GetSecretValueAsync(request);
 
       var secretObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.SecretString);
