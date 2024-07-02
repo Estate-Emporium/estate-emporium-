@@ -9,8 +9,8 @@ namespace estate_emporium.Services
         private readonly DbService _dbService = dbService;
         public async Task<long?> GetProperty(PurchaseModel purchaseModel)
         {
-            var saleId=await _dbService.initPropertySaleAsync(purchaseModel);
 
+            var saleId=await _dbService.initPropertySaleAsync(purchaseModel);
             var client = _httpClientFactory.CreateClient(nameof(HttpClientEnum.property_manager));
             var getProperty = new GetPropertyModel { size = (int)purchaseModel.NumUnits };
 
