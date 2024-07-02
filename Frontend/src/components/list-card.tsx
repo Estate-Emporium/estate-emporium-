@@ -1,7 +1,7 @@
-import { Flex, useColorMode } from "@chakra-ui/react";
+import { Flex } from '@chakra-ui/react';
 
 const ListCard = () => {
-  const { colorMode } = useColorMode();
+  // const { colorMode } = useColorMode();
   return <Flex></Flex>;
 };
 
