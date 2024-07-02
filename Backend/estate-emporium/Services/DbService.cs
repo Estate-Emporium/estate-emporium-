@@ -15,10 +15,9 @@ namespace estate_emporium.Services
             var newSale = new PropertySale
             {
                 BuyerId = (long)purchaseModel.BuyerId,
-
             };
             _dbContext.Add(newSale);
-           await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
             return newSale.SaleId;
         }
         public async Task updateWithPropertyResponse(long saleID, GetPropertyResponseModel getPropertyResponseModel)
@@ -41,7 +40,7 @@ namespace estate_emporium.Services
             var thisSale = await getSaleByIdAsync(saleID);
             thisSale.StatusId = -1;
             await _dbContext.SaveChangesAsync();
-            //Maybe here try back up the chain to tell everyone else it failed?
+            //TODO Maybe here try back up the chain to tell everyone else it failed?
         }
         public async Task populateHomeLoanId(PropertySale thisSale, long loanId)
         {
