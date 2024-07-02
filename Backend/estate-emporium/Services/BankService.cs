@@ -26,15 +26,15 @@ namespace estate_emporium.Services
             {
                 amountToTax = basePrice*Consts.taxPercentage/100;
                 var amountToPersona = basePrice - amountToTax;
-                long sellerbankID=await getPersonaAccount(thisSale.SellerId);
-                await payCompany(thisSale, amountToPersona, sellerbankID.ToString(), "Sale");
+                long sellerbankID=thisSale.SellerId;
+                await pay(thisSale, amountToPersona, sellerbankID.ToString(), "Sale", false);
             }
 
-            await payCompany(thisSale, commissionAmount, Consts.ourAccount, "Commission");
-            await payCompany(thisSale, amountToTax, Consts.taxAccount, "Tax");
+            await pay(thisSale, commissionAmount, Consts.ourAccount, "Commission");
+            await pay(thisSale, amountToTax, Consts.taxAccount, "Tax");
 
         }
-        public async Task payCompany(PropertySale thisSale, long amount, string recepient, string reason)
+        public async Task pay(PropertySale thisSale, long amount, string recepient, string reason, bool isCompany=true)
         {
 
             var client = _httpClientFactory.CreateClient(nameof(HttpClientEnum.retail_bank));
@@ -46,8 +46,8 @@ namespace estate_emporium.Services
                 Recepient = new Recipient()
                 {
                     AccountId = recepient,
-                    BankId = 1001
-                }
+                    BankId = isCompany ? 1001 : 1000
+        }
             };
             var response = await client.PostAsJsonAsync("api/transactions/payments", payload);
 
@@ -62,13 +62,5 @@ namespace estate_emporium.Services
             }
 
         }
-        public async Task<long> getPersonaAccount(long personaId)
-        {
-            var client = _httpClientFactory.CreateClient(nameof(HttpClientEnum.retail_bank));
-            var response = await client.GetAsync($"api/customers/{personaId}/accounts");
-            var accountResponse = await response.Content.ReadFromJsonAsync<AccountModel>();
-            return accountResponse.AccountId;
-        }
-
     }
 }
