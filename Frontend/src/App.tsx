@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Authenticator } from "@aws-amplify/ui-react";
 import "./App.css";
 import "@aws-amplify/ui-react/styles.css";
-import "./App.css";
+import LandingPage from "./pages/landing-page";
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
       <BrowserRouter>
         <main>
           <Routes>
-            <Route path="/" element={<div>Home</div>} />
+            <Route path="/" element={<LandingPage />} />
           </Routes>
         </main>
       </BrowserRouter>
