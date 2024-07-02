@@ -3,6 +3,7 @@ import { Authenticator } from "@aws-amplify/ui-react";
 import "./App.css";
 import "@aws-amplify/ui-react/styles.css";
 import LandingPage from "./pages/landing-page";
+import SalesPage from "./pages/sales-list-page";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/sales-list" element={<SalesPage />} />
           </Routes>
         </main>
       </BrowserRouter>

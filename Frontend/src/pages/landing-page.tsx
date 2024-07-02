@@ -1,12 +1,14 @@
 import { Button, Flex, Heading, useColorMode } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../components/nav-bar";
 import logo from "../assets/logo.svg";
 
 const LandingPage = () => {
   const { colorMode } = useColorMode();
+  const navigate = useNavigate();
 
   const handleViewListingClick = () => {
-    console.log("Button clicked!");
+    navigate(`/sales-list`);
   };
 
   return (
