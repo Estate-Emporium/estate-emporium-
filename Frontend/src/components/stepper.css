@@ -12,6 +12,7 @@ ol.stepper {
   counter-reset: step;
   padding: 0;
   font-size: x-small;
+  color: var(--default-c);
   counter-reset: step;
   overflow: hidden;
   width: 100%;
@@ -23,7 +24,7 @@ ol.stepper li {
   position: relative;
 }
 ol.stepper li::before {
-  content: "";
+  content: '';
   counter-increment: step;
   display: grid;
   place-content: center;
@@ -35,14 +36,19 @@ ol.stepper li::before {
   z-index: 1;
 }
 
-.completed ~ li::before {
+ol.stepper li.active ~ li::before {
+  background: var(--default-b);
+  border-color: var(--default-c);
+}
+
+ol.stepper li.incomplete ~ li::before {
   background: var(--default-b);
   border: 1px solid var(--default-b);
 }
 
-ol.stepper li.active ~ li::before {
-  background: var(--default-b);
-  border-color: var(--default-b);
+ol.stepper li.completed ~ li::before {
+  background: var(--default-c);
+  border: 1px solid var(--default-);
 }
 
 .stepper-container {
