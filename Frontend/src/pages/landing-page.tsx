@@ -63,6 +63,7 @@ const LandingPage = () => {
           <Button
             size="large"
             variant="solid"
+            fontWeight="700"
             bg={colorMode === "light" ? "primary.200" : "accent.100"}
             color={colorMode === "light" ? "accent.100" : "primary.200"}
             onClick={handleViewListingClick}
