@@ -28,6 +28,7 @@ namespace estate_emporium.Controllers
             {
                 var propertyManagerService = serviceProvider.GetRequiredService<PropertyManagerService>();
                 var loanService = serviceProvider.GetRequiredService<LoanService>();
+                var personaService=serviceProvider.GetRequiredService<PersonaService>();
                 try
                 {
                     var saleId = await propertyManagerService.GetProperty(purchaseModel);
@@ -45,12 +46,13 @@ namespace estate_emporium.Controllers
                     catch (Exception ex)
                     {
                         await propertyManagerService.CompleteSale(thisSaleId, false);
-                        // TODO: Call persona to inform them it failed
+                        await personaService.CompleteSale((ulong)purchaseModel.BuyerId, false);
+                       
                     }
                 }
                 catch (Exception ex)
                 {
-                    // TODO: Call persona to inform them it failed
+                    await personaService.CompleteSale((ulong)purchaseModel.BuyerId, false);
                 }
             });
 
@@ -94,29 +96,29 @@ namespace estate_emporium.Controllers
             {
                 var propertyManagerService = serviceProvider.GetRequiredService<PropertyManagerService>();
                 var bankService = serviceProvider.GetRequiredService<BankService>();
+                var personaService = serviceProvider.GetRequiredService<PersonaService>();
 
                 try
                 {
                     if ((bool)!loanApprovalModel.IsApproved)
                     {
                         await propertyManagerService.CompleteSale(thisSale.SaleId, false);
-                        // TODO: Call persona to inform them it failed
+                        await personaService.CompleteSale((ulong)thisSale.BuyerId, false);
                     }
                     else
                     {
                         thisSale.StatusId += 1;
                         await _dbService.saveChangesAsync();
-
                         // Call back to transfer money to us, tax, seller
                         await bankService.transferAllMoney(thisSale);
                         await propertyManagerService.CompleteSale(thisSale.SaleId, true);
-                        // TODO: Call persona to inform them it succeeded
+                        await personaService.CompleteSale((ulong)thisSale.BuyerId, true);
                     }
                 }
                 catch (Exception ex)
                 {
                     await propertyManagerService.CompleteSale(thisSale.SaleId, false);
-                    // TODO: Call persona to inform them it failed
+                    await personaService.CompleteSale((ulong)thisSale.BuyerId, false);
                 }
             });
 

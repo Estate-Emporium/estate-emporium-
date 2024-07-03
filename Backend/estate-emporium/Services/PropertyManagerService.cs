@@ -47,7 +47,7 @@ namespace estate_emporium.Services
             else { thisSale.StatusId++; }
             await _dbService.saveChangesAsync();
 
-            var response = await client.PutAsJsonAsync("PropertyManager/Approval", complete);
+            var response = await client.PutAsJsonAsync("PropertyManager/ApproveSale", complete);
             if(response.IsSuccessStatusCode) { Console.WriteLine("Purchase completed"); }
             else
             {
