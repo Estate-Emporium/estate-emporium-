@@ -15,8 +15,6 @@ class HouseSalesService {
       async (config) => {
         const session = await fetchAuthSession();
         const idToken = session?.tokens?.idToken?.toString();
-        console.log(idToken);
-        console.log(config);
         if (config.headers && idToken) {
           config.headers.Authorization = `Bearer ${idToken}`;
         }

@@ -1,4 +1,11 @@
-import { Card, CardBody, Flex, useColorMode, Heading } from "@chakra-ui/react";
+import {
+  Card,
+  CardBody,
+  Flex,
+  useColorMode,
+  Heading,
+  Skeleton,
+} from "@chakra-ui/react";
 import NavBarV2 from "../components/nav-bar-v2";
 import houseSalesService from "../services/houseSalesService";
 import ListCard from "../components/list-card";
@@ -15,6 +22,7 @@ const SalesPage = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedPriceRange, setSelectedPriceRange] = useState("");
   const [data, setData] = useState<ListItems[] | undefined>([]);
+  const [loading, setLoading] = useState(true);
 
   const filteredData = data?.filter((item: ListItems) => {
     // if a status filter is selected
@@ -70,10 +78,13 @@ const SalesPage = () => {
   useEffect(() => {
     const fetchSalesService = async () => {
       try {
+        setLoading(true);
         const salesData: ListItems[] = await houseSalesService.fetchSales();
         setData(salesData);
       } catch (error) {
         console.error("Error fetching sales opportunities:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -128,49 +139,60 @@ const SalesPage = () => {
             ))}
           </Select>
         </Flex>
-        <Flex flexDir="column" gap="3vh" overflow="auto" height="75vh" p="2vh">
-          <Card
-            width="80vw"
-            justify="flex-start"
-            style={{
-              background: `linear-gradient(to right, ${
-                colorMode === "light" ? "#6C869EFF" : "#CAD5D966"
-              } 0%, ${colorMode === "light" ? "#44515C66" : "#44515CFF"} 100%)`,
-            }}
+        <Skeleton isLoaded={!loading}>
+          <Flex
+            flexDir="column"
+            gap="3vh"
+            overflow="auto"
+            height="75vh"
+            p="2vh"
           >
-            <CardBody>
-              <Flex
-                flexDir="row"
-                justify="space-between"
-                align="center"
-                paddingLeft="2vw"
-                paddingRight="2vw"
-              >
-                <Heading textAlign="center" minWidth="8vw" fontSize="1.5rem">
-                  ID
-                </Heading>
-                <Heading textAlign="center" minWidth="10vw" fontSize="1.5rem">
-                  LIST PRICE
-                </Heading>
-                <Heading textAlign="center" minWidth="10vw" fontSize="1.5rem">
-                  COMMISSION
-                </Heading>
-                <Heading textAlign="center" width="50%" fontSize="1.5rem">
-                  STATUS
-                </Heading>
-              </Flex>
-            </CardBody>
-          </Card>
-          {filteredData?.map((item: ListItems) => (
-            <ListCard
-              key={item.id}
-              id={item.id}
-              status={item.status}
-              price={item.price}
-              commission={item.commission}
-            />
-          ))}
-        </Flex>
+            <Card
+              width="80vw"
+              justify="flex-start"
+              style={{
+                background: `linear-gradient(to right, ${
+                  colorMode === "light" ? "#6C869EFF" : "#CAD5D966"
+                } 0%, ${
+                  colorMode === "light" ? "#44515C66" : "#44515CFF"
+                } 100%)`,
+              }}
+            >
+              <CardBody>
+                <Flex
+                  flexDir="row"
+                  justify="space-between"
+                  align="center"
+                  paddingLeft="2vw"
+                  paddingRight="2vw"
+                >
+                  <Heading textAlign="center" minWidth="8vw" fontSize="1.5rem">
+                    ID
+                  </Heading>
+                  <Heading textAlign="center" minWidth="10vw" fontSize="1.5rem">
+                    LIST PRICE
+                  </Heading>
+                  <Heading textAlign="center" minWidth="10vw" fontSize="1.5rem">
+                    COMMISSION
+                  </Heading>
+                  <Heading textAlign="center" width="50%" fontSize="1.5rem">
+                    STATUS
+                  </Heading>
+                </Flex>
+              </CardBody>
+            </Card>
+
+            {filteredData?.map((item: ListItems) => (
+              <ListCard
+                key={item.saleId}
+                saleId={item.saleId}
+                status={item.status}
+                price={item.price}
+                commission={item.commission}
+              />
+            ))}
+          </Flex>
+        </Skeleton>
       </Flex>
     </Flex>
   );

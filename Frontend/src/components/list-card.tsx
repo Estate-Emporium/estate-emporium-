@@ -4,6 +4,7 @@ import { ListItems } from "../models/sales-list";
 
 const ListCard = (listItems: ListItems) => {
   const { colorMode } = useColorMode();
+
   return (
     <Card
       width="80vw"
@@ -23,17 +24,18 @@ const ListCard = (listItems: ListItems) => {
           <Flex
             flexDir="row"
             justify="space-between"
+            width="50%"
             paddingLeft="2vw"
             paddingRight="2vw"
           >
             <Text textAlign="center" minWidth="8vw">
-              {listItems.id}
+              {listItems.saleId}
             </Text>
             <Text textAlign="center" minWidth="10vw">
-              {listItems.price}
+              {listItems.price}Ð
             </Text>
             <Text textAlign="center" minWidth="10vw">
-              {listItems.commission}
+              {listItems.commission}Ð
             </Text>
           </Flex>
           <StatusStepper currentStatus={listItems.status} />
