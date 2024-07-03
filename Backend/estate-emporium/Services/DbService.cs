@@ -52,6 +52,11 @@ namespace estate_emporium.Services
         {
             return await _dbContext.PropertySales.Where(s => s.HomeLoanId == loanId).FirstOrDefaultAsync();
         }
+        public async Task resetData()
+        {
+            _dbContext.Database.ExecuteSqlRaw("TRUNCATE TABLE PropertySales");
+            await _dbContext.SaveChangesAsync();
+        }
         public async Task saveChangesAsync()
         {
             await _dbContext.SaveChangesAsync();
