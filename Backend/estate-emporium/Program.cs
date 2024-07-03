@@ -1,15 +1,17 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
+using Microsoft.OpenApi.Models;
 using estate_emporium;
-
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Options;
 using DotNetEnv;
 using estate_emporium.Models;
+using Microsoft.IdentityModel.Tokens;
 using estate_emporium.Utils;
 using estate_emporium.Services;
 using System.Runtime.ConstrainedExecution;
@@ -30,6 +32,54 @@ builder.Services.AddCors(options =>
                  .WithHeaders("Authorization", "Content-Type", "Accept");
                     });
 });
+
+
+var cognitoAppClientId = Environment.GetEnvironmentVariable("VITE_CLIENT_ID");
+var cognitoUserPoolId = Environment.GetEnvironmentVariable("VITE_USER_POOL_ID");
+var cognitoAWSRegion = Environment.GetEnvironmentVariable("VITE_AWS_REGION");
+
+string validIssuer = $"https://cognito-idp.{cognitoAWSRegion}.amazonaws.com/{cognitoUserPoolId}";
+string validAudience = cognitoAppClientId;
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+    {
+      options.Authority = validIssuer;
+      options.TokenValidationParameters = new TokenValidationParameters
+      {
+        ValidateLifetime = true,
+        ValidAudience = validAudience,
+        ValidateAudience = true,
+        RoleClaimType = "cognito:groups"
+      };
+    });
+
+// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//         .AddJwtBearer(options =>
+//         {
+//           options.Authority = Environment.GetEnvironmentVariable("COGNITO_PROPMAN_Authority");
+
+//           options.Audience = Environment.GetEnvironmentVariable("COGNITO_PROPMAN_ClientId");
+
+//           options.TokenValidationParameters = new TokenValidationParameters
+//           {
+//             ValidateIssuer = true,
+//             ValidIssuer = Environment.GetEnvironmentVariable("COGNITO_PROPMAN_Authority"),
+
+//             ValidateAudience = true,
+//             ValidAudience = Environment.GetEnvironmentVariable("COGNITO_PROPMAN_ClientId"),
+
+//             ValidateIssuerSigningKey = true,
+//             IssuerSigningKeyResolver = (token, securityToken, kid, parameters) =>
+//             {
+//               // Fetch the JSON Web Key Set (JWKS) from the authority and find the matching key.
+//               var jwks = GetJsonWebKeySetAsync().GetAwaiter().GetResult();
+//               return jwks.Keys.Where(k => k.KeyId == kid);
+//             },
+//             ValidateLifetime = true
+//           };
+//         });
 
 // Add services to the container.
 builder.Services.AddControllers(options =>
@@ -90,11 +140,11 @@ builder.Services.AddServicesFromNamespace(Assembly.GetExecutingAssembly(), "esta
 
 var app = builder.Build();
 
-  app.UseSwagger();
-  app.UseSwaggerUI(c =>
-  {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-  });
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+  c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+});
 
 
 app.UseHttpsRedirection();
