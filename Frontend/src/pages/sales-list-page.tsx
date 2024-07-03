@@ -1,6 +1,6 @@
 import { Flex, useColorMode } from '@chakra-ui/react';
 import NavBar from '../components/nav-bar';
-import StatusStepper from '../components/status-stepper';
+import ListCard from '../components/list-card';
 import './stepper.css';
 
 const SalesPage = () => {
@@ -16,7 +16,7 @@ const SalesPage = () => {
     >
       <NavBar />
       <Flex height='90vh' width='100vw' align='center' justify='center'>
-        <StatusStepper currentStatus='In Progress' />
+        <ListCard></ListCard>
       </Flex>
     </Flex>
   );
