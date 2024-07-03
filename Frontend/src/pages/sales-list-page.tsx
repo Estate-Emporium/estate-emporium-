@@ -1,8 +1,7 @@
-import { Flex, useColorMode, Text } from '@chakra-ui/react';
+import { Flex, useColorMode } from '@chakra-ui/react';
 import NavBarV2 from '../components/nav-bar-v2';
-import StatusStepper from '../components/status-stepper';
+import ListCard from '../components/list-card';
 import { Select } from '@chakra-ui/react';
-import { Card, CardBody } from '@chakra-ui/react';
 
 const SalesPage = () => {
   const { colorMode } = useColorMode();
@@ -66,125 +65,12 @@ const SalesPage = () => {
           </Select>
         </Flex>
         <Flex flexDir='column' gap='3vh' overflow='auto' height='75vh' p='2vh'>
-          <Card
-            width='80vw'
-            style={{
-              background: `linear-gradient(to bottom left, ${
-                colorMode === 'light' ? '#6C869E42' : '#CAD5D942'
-              } 0%, ${colorMode === 'light' ? '#12222B42' : '#44515C42'} 100%)`,
-            }}
-          >
-            <CardBody>
-              <Flex flexDir='row' justify='space-between' align='center'>
-                <Text>123</Text>
-                <Text>$1 000 000</Text>
-                <Text>$10 000</Text>
-                <StatusStepper currentStatus='Purchase Failed' />
-              </Flex>
-            </CardBody>
-          </Card>
-          <Card
-            width='80vw'
-            style={{
-              background: `linear-gradient(to bottom left, ${
-                colorMode === 'light' ? '#6C869E42' : '#CAD5D942'
-              } 0%, ${colorMode === 'light' ? '#12222B42' : '#44515C42'} 100%)`,
-            }}
-          >
-            <CardBody>
-              <Flex flexDir='row' justify='space-between' align='center'>
-                <Text>123</Text>
-                <Text>$1 000 000</Text>
-                <Text>$10 000</Text>
-                <StatusStepper currentStatus='Purchase Failed' />
-              </Flex>
-            </CardBody>
-          </Card>
-          <Card
-            width='80vw'
-            style={{
-              background: `linear-gradient(to bottom left, ${
-                colorMode === 'light' ? '#6C869E42' : '#CAD5D942'
-              } 0%, ${colorMode === 'light' ? '#12222B42' : '#44515C42'} 100%)`,
-            }}
-          >
-            <CardBody>
-              <Flex flexDir='row' justify='space-between' align='center'>
-                <Text>123</Text>
-                <Text>$1 000 000</Text>
-                <Text>$10 000</Text>
-                <StatusStepper currentStatus='Awaiting home loan' />
-              </Flex>
-            </CardBody>
-          </Card>
-          <Card
-            width='80vw'
-            style={{
-              background: `linear-gradient(to bottom left, ${
-                colorMode === 'light' ? '#6C869E42' : '#CAD5D942'
-              } 0%, ${colorMode === 'light' ? '#12222B42' : '#44515C42'} 100%)`,
-            }}
-          >
-            <CardBody>
-              <Flex flexDir='row' justify='space-between' align='center'>
-                <Text>123</Text>
-                <Text>$1 000 000</Text>
-                <Text>$10 000</Text>
-                <StatusStepper currentStatus='Persona Notified' />
-              </Flex>
-            </CardBody>
-          </Card>
-          <Card
-            width='80vw'
-            style={{
-              background: `linear-gradient(to bottom left, ${
-                colorMode === 'light' ? '#6C869E42' : '#CAD5D942'
-              } 0%, ${colorMode === 'light' ? '#12222B42' : '#44515C42'} 100%)`,
-            }}
-          >
-            <CardBody>
-              <Flex flexDir='row' justify='space-between' align='center'>
-                <Text>123</Text>
-                <Text>$1 000 000</Text>
-                <Text>$10 000</Text>
-                <StatusStepper currentStatus='Persona Notified' />
-              </Flex>
-            </CardBody>
-          </Card>
-          <Card
-            width='80vw'
-            style={{
-              background: `linear-gradient(to bottom left, ${
-                colorMode === 'light' ? '#6C869E42' : '#CAD5D942'
-              } 0%, ${colorMode === 'light' ? '#12222B42' : '#44515C42'} 100%)`,
-            }}
-          >
-            <CardBody>
-              <Flex flexDir='row' justify='space-between' align='center'>
-                <Text>123</Text>
-                <Text>$1 000 000</Text>
-                <Text>$10 000</Text>
-                <StatusStepper currentStatus='Awaiting home loan' />
-              </Flex>
-            </CardBody>
-          </Card>
-          <Card
-            width='80vw'
-            style={{
-              background: `linear-gradient(to bottom left, ${
-                colorMode === 'light' ? '#6C869E42' : '#CAD5D942'
-              } 0%, ${colorMode === 'light' ? '#12222B42' : '#44515C42'} 100%)`,
-            }}
-          >
-            <CardBody>
-              <Flex flexDir='row' justify='space-between' align='center'>
-                <Text>123</Text>
-                <Text>$1 000 000</Text>
-                <Text>$10 000</Text>
-                <StatusStepper currentStatus='Purchase Failed' />
-              </Flex>
-            </CardBody>
-          </Card>
+          <ListCard
+            id='1'
+            status='Purchase Failed'
+            price='100'
+            commission='10'
+          />
         </Flex>
       </Flex>
     </Flex>

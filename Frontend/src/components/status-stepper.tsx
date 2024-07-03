@@ -18,8 +18,11 @@ function getCurrentState(index: number, currentStepIndex: number) {
   if (index < currentStepIndex) {
     return 'completed';
   }
-
-  return '';
+  if (index === currentStepIndex) {
+    return 'active';
+  } else if (index > currentStepIndex) {
+    return 'incomplete';
+  }
 }
 
 const StatusStepper: React.FC<StepperProps> = ({ currentStatus }) => {
@@ -34,8 +37,6 @@ const StatusStepper: React.FC<StepperProps> = ({ currentStatus }) => {
   ];
 
   const currentStepIndex = steps.indexOf(currentStatus);
-
-  console.log(currentStepIndex);
 
   return (
     <div className='stepper-container'>
