@@ -1,5 +1,6 @@
 ﻿using estate_emporium.Models;
 using estate_emporium.Models.HomeLoans;
+using estate_emporium.Models.PropertyManager;
 using estate_emporium.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,10 +10,12 @@ using System.Threading.Tasks;
 namespace estate_emporium.Controllers
 {
     [Route("api")]
-    public class PropertyController(BackgroundTaskService taskService, DbService dbService): Controller
+    public class PropertyController(BackgroundTaskService taskService, DbService dbService, PropertyManagerService propertyManager): Controller
     {
         private readonly BackgroundTaskService _taskService= taskService;
         private readonly DbService _dbService = dbService;
+
+        private readonly PropertyManagerService _propertyManagerService = propertyManager;
 
         /// <summary>
         /// Initiates the purchase of a house.
@@ -68,11 +71,18 @@ namespace estate_emporium.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult ListHouseForSale([FromBody] ulong personaId)
+        public async Task<IActionResult> ListHouseForSaleAsync([FromBody] SellPropertyModel sellModel)
         {
-            //TODO
+                try
+                {
+                    await _propertyManagerService.SellProperty((long)sellModel.sellerId);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex);
+                }
 
-            return Ok("Endpoint not yet implemented");
+            return Ok("LISTED FOR SALE");
         }
 
         /// <summary>

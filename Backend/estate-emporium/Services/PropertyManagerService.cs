@@ -1,4 +1,5 @@
-﻿using estate_emporium.Models;
+﻿using System.Diagnostics;
+using estate_emporium.Models;
 using estate_emporium.Models.PropertyManager;
 
 namespace estate_emporium.Services
@@ -29,6 +30,20 @@ namespace estate_emporium.Services
                     throw new Exception("Dependency failed: No properties availible");
             }
         }
+        
+        public async Task SellProperty(long personaId){
+            var client = _httpClientFactory.CreateClient(nameof(HttpClientEnum.property_manager));
+            var response = await client.PostAsync($"PropertyManager/Sell?Id={personaId}", null);
+            Console.WriteLine(response);
+            if(response.IsSuccessStatusCode) { Console.WriteLine("Sale completed"); }
+            else
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to get property. Status code: {response.StatusCode}\n Error{body}");
+                throw new Exception("Dependency failed: No properties availible");
+            }
+        }
+        
         public async Task CompleteSale(long saleId, bool isSuccessful)
         {
             var thisSale= await _dbService.getSaleByIdAsync(saleId);
