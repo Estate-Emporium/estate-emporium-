@@ -1,21 +1,22 @@
 import { Card, CardBody, Flex, useColorMode, Heading } from "@chakra-ui/react";
 import NavBarV2 from "../components/nav-bar-v2";
+import houseSalesService from "../services/houseSalesService";
 import ListCard from "../components/list-card";
 import { Select } from "@chakra-ui/react";
 import {
   ListItems,
-  mockData,
   statusDropDownData,
   priceDropDownData,
 } from "../models/sales-list";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SalesPage = () => {
   const { colorMode } = useColorMode();
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedPriceRange, setSelectedPriceRange] = useState("");
+  const [data, setData] = useState<ListItems[] | undefined>([]);
 
-  const filteredData = mockData.filter((item: ListItems) => {
+  const filteredData = data?.filter((item: ListItems) => {
     // if a status filter is selected
     if (selectedStatus && selectedStatus !== "All") {
       if (item.status === selectedStatus) {
@@ -65,6 +66,19 @@ const SalesPage = () => {
       return item;
     }
   });
+
+  useEffect(() => {
+    const fetchSalesService = async () => {
+      try {
+        const salesData: ListItems[] = await houseSalesService.fetchSales();
+        setData(salesData);
+      } catch (error) {
+        console.error("Error fetching sales opportunities:", error);
+      }
+    };
+
+    fetchSalesService();
+  }, []);
 
   return (
     <Flex
@@ -147,7 +161,7 @@ const SalesPage = () => {
               </Flex>
             </CardBody>
           </Card>
-          {filteredData.map((item) => (
+          {filteredData?.map((item: ListItems) => (
             <ListCard
               key={item.id}
               id={item.id}
