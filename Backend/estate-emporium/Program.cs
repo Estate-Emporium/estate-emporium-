@@ -22,16 +22,27 @@ DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 
+// builder.Services.AddCors(options =>
+// {
+//   options.AddPolicy(name: MyAllowSpecificOrigins,
+//                     policy =>
+//                     {
+//                       policy.WithOrigins(
+//                                             Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "https://localhost:5173/").AllowAnyHeader()
+//                            .AllowAnyMethod();
+//                     });
+// });
+
 builder.Services.AddCors(options =>
-{
-  options.AddPolicy(name: MyAllowSpecificOrigins,
-                    policy =>
-                    {
-                      policy.WithOrigins(
-                                            Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "https://localhost:5173/").AllowAnyHeader()
-                           .AllowAnyMethod();
-                    });
-});
+      {
+        options.AddPolicy(name: MyAllowSpecificOrigins,
+                  policy =>
+                  {
+                    policy.AllowAnyOrigin()
+                      .AllowAnyMethod() // Only allows GET and POST methods
+                      .AllowAnyHeader();
+                  });
+      });
 
 
 var cognitoAppClientId = Environment.GetEnvironmentVariable("VITE_CLIENT_ID");
