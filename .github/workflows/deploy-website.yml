@@ -30,11 +30,11 @@ jobs:
       - name: Generate .env
         run: |
             cd Frontend
-            echo "VITE_AWS_REGION"=${{ secrets.VITE_AWS_REGION }} > .env 
-            echo "VITE_USER_POOL_ID"=${{ secrets.VITE_USER_POOL_ID }} >> .env 
-            echo "VITE_CLIENT_ID"=${{ secrets.VITE_CLIENT_ID }} >> .env 
-            echo "VITE_REDIRECT_URI"=${{ secrets.VITE_REDIRECT_URI }} >> .env 
-            echo "VITE_DOMAIN"=${{ secrets.VITE_DOMAIN }} >> .env 
+            echo "VITE_AWS_REGION=${{ secrets.VITE_AWS_REGION }}" > .env 
+            echo "VITE_USER_POOL_ID=${{ secrets.VITE_USER_POOL_ID }}" >> .env 
+            echo "VITE_CLIENT_ID=${{ secrets.VITE_CLIENT_ID }}" >> .env 
+            echo "VITE_REDIRECT_URI=${{ secrets.VITE_REDIRECT_URI }}" >> .env 
+            echo "VITE_DOMAIN=${{ secrets.VITE_DOMAIN }}" >> .env 
 
       - name: Build App
         run: |
