@@ -1,12 +1,6 @@
 import { Card, CardBody, Flex, Text, useColorMode } from "@chakra-ui/react";
-import StatusStepper, { Step } from "./status-stepper";
-
-type ListItems = {
-  id: string;
-  price: string;
-  commission: string;
-  status: Step;
-};
+import StatusStepper from "./status-stepper";
+import { ListItems } from "../models/sales-list";
 
 const ListCard = (listItems: ListItems) => {
   const { colorMode } = useColorMode();
