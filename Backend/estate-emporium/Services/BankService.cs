@@ -42,7 +42,7 @@ namespace estate_emporium.Services
             {
                 AmountInMibiBBDough = amount,
                 SenderId = thisSale.BuyerId,
-                Reference = $"{reason} for Home: {thisSale.PropertyId} with Loan: {thisSale.HomeLoanId}",
+                Reference = $"real_estate_sales : {reason} for Home: {thisSale.PropertyId} with Loan: {thisSale.HomeLoanId}",
                 Recepient = new Recipient()
                 {
                     AccountId = recepient,

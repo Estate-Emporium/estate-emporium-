@@ -45,6 +45,7 @@ namespace estate_emporium.Controllers
                     try
                     {
                         await loanService.submitLoanApplicationAsync(thisSaleId);
+
                     }
                     catch (Exception ex)
                     {
@@ -118,11 +119,13 @@ namespace estate_emporium.Controllers
                     }
                     else
                     {
-                        await dbSerivce.setStatusbyId(thisSale.SaleId);
-                        // Call back to transfer money to us, tax, seller
+                        await dbSerivce.setStatusbyId(thisSale.SaleId,2);
                         await bankService.transferAllMoney(thisSale);
+                        await dbSerivce.setStatusbyId(thisSale.SaleId, 3);
                         await propertyManagerService.CompleteSale(thisSale.SaleId, true);
+                        await dbSerivce.setStatusbyId(thisSale.SaleId, 4);
                         await personaService.CompleteSale((ulong)thisSale.BuyerId, true);
+                        await dbSerivce.setStatusbyId(thisSale.SaleId, 5);
                     }
                 }
                 catch (Exception ex)

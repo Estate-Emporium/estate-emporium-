@@ -46,7 +46,7 @@ namespace estate_emporium.Services
         public async Task populateHomeLoanId(PropertySale thisSale, string loanId)
         {
             thisSale.HomeLoanId = loanId;
-            thisSale.StatusId += 1;
+            thisSale.StatusId = 1;
             await _dbContext.SaveChangesAsync();
         }
         public async Task<PropertySale> getSalebyLoanId(string loanId)
@@ -71,10 +71,10 @@ namespace estate_emporium.Services
             }).ToList() ;
             return result;
         }
-        public async Task setStatusbyId(long id)
+        public async Task setStatusbyId(long id, int statusID)
         {
             var sale = await getSaleByIdAsync(id);
-            sale.StatusId += 1;
+            sale.StatusId=statusID;
             await _dbContext.SaveChangesAsync();
         }
         public async Task saveChangesAsync()
