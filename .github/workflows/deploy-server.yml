@@ -56,6 +56,12 @@ jobs:
             echo "VITE_CLIENT_ID"=${{ secrets.VITE_CLIENT_ID }} >> .env 
             echo "VITE_REDIRECT_URI"=${{ secrets.VITE_REDIRECT_URI }} >> .env 
             echo "VITE_DOMAIN"=${{ secrets.VITE_DOMAIN }} >> .env 
+            echo "home_loans_URL"= ${{ secrets.home_loans_URL }}" >> .env
+            echo "retail_bank_URL"= ${{ secrets.retail_bank_URL }}" >> .env
+            echo "property_URL"= ${{ secrets.property_URL }}" >> .env
+            echo "persona_URL"= ${{secrets.property_URL}} >> .env
+
+
             
       - name: Package artifact
         run: zip -r ./server.zip .env .dockerignore *
