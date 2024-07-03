@@ -3,6 +3,7 @@ using estate_emporium.Models.db;
 using estate_emporium.Models.PropertyManager;
 using estate_emporium.Utils;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace estate_emporium.Services
 {
@@ -56,6 +57,19 @@ namespace estate_emporium.Services
         {
             _dbContext.Database.ExecuteSqlRaw("TRUNCATE TABLE PropertySales");
             await _dbContext.SaveChangesAsync();
+        }
+        public  List<FrontendModel> getFrontData()
+        {
+
+            var result= _dbContext.PropertySales.Select(s =>
+            new FrontendModel
+            {
+                SaleId = s.SaleId,
+                Status= s.Status.StatusName,
+                Price = (s.SalePrice / (1 + Consts.Commission / 100)),
+                Commission =  s.SalePrice - (s.SalePrice / (1 + Consts.Commission / 100))
+            }).ToList() ;
+            return result;
         }
         public async Task saveChangesAsync()
         {

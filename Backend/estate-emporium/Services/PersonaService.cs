@@ -17,7 +17,7 @@ namespace estate_emporium.Services;
                 isSuccess = isSuccessful
             };
 
-            var response = await client.PostAsJsonAsync("api/buyHouseSuccess", payload);
+            var response = await client.PostAsJsonAsync("api/PropertySales/buyHouseSuccess", payload);
             if (!response.IsSuccessStatusCode)
             {
                 var body = await response.Content.ReadAsStringAsync();
