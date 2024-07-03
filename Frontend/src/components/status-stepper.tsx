@@ -1,35 +1,51 @@
-import React from 'react';
+import React from "react";
+import { Tooltip } from "@chakra-ui/react";
+import "./stepper.css";
 
-type Step = 'Pending' | 'In Progress' | 'Sold';
+export type Step =
+  | "Purchase Failed"
+  | "Not started"
+  | "Awaiting home loan"
+  | "Loan approved"
+  | "Payment received"
+  | "Ownership transfer complete"
+  | "Persona Notified";
 interface StepperProps {
   currentStatus: Step;
 }
 
 function getCurrentState(index: number, currentStepIndex: number) {
-  if (index === currentStepIndex) {
-    return 'active';
-  }
   if (index < currentStepIndex) {
-    return 'completed';
+    return "completed";
   }
 
-  return '';
+  return "";
 }
 
 const StatusStepper: React.FC<StepperProps> = ({ currentStatus }) => {
-  const steps: Step[] = ['Pending', 'In Progress', 'Sold'];
+  const steps: Step[] = [
+    "Purchase Failed",
+    "Not started",
+    "Awaiting home loan",
+    "Loan approved",
+    "Payment received",
+    "Ownership transfer complete",
+    "Persona Notified",
+  ];
 
   const currentStepIndex = steps.indexOf(currentStatus);
 
   console.log(currentStepIndex);
 
   return (
-    <div className='stepper-container'>
-      <ol className='stepper'>
+    <div className="stepper-container">
+      <ol className="stepper">
         {steps.map((step, index) => (
-          <li key={step} className={getCurrentState(index, currentStepIndex)}>
-            {step}
-          </li>
+          <Tooltip label={step} fontSize="sm">
+            <li key={step} className={getCurrentState(index, currentStepIndex)}>
+              {index + 1}
+            </li>
+          </Tooltip>
         ))}
       </ol>
     </div>

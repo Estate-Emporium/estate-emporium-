@@ -1,10 +1,8 @@
 ol.stepper {
   --default-b: #6c869e;
   --default-c: #12222b;
-  --active-b: purple;
-  --active-c: white;
-  --circle: 1em; /* size of circle */
-  --b: 1px; /* line thickness */
+  --circle: 1em;
+  --b: 1px;
 
   display: flex;
   list-style: none;
@@ -13,7 +11,7 @@ ol.stepper {
     calc((var(--circle) - var(--b)) / 2) / 100% var(--b);
   counter-reset: step;
   padding: 0;
-  font-size: 12px;
+  font-size: x-small;
   counter-reset: step;
   overflow: hidden;
   width: 100%;
@@ -21,39 +19,30 @@ ol.stepper {
 ol.stepper li {
   display: grid;
   place-items: center;
-  gap: 1px;
+  gap: var(--b);
   position: relative;
 }
 ol.stepper li::before {
-  content: '';
+  content: "";
   counter-increment: step;
   display: grid;
   place-content: center;
   aspect-ratio: 1;
   height: var(--circle);
-  border: 1px solid #12222b;
+  border: 1px solid var(--default-c);
   background: var(--default-c);
-  color: var(--active-c);
   border-radius: 50%;
   z-index: 1;
 }
-ol.stepper li.completed ~ li::before {
+
+.completed ~ li::before {
   background: var(--default-b);
-  color: var(--default-c);
-  border: 1px solid #12222b;
+  border: 1px solid var(--default-b);
 }
+
 ol.stepper li.active ~ li::before {
   background: var(--default-b);
-  color: var(--default-c);
-  border: 1px solid (var(--default-b));
-}
-ol.stepper li.active::after {
-  content: '';
-  position: absolute;
-  height: var(--b);
-  right: 100%;
-  top: calc((var(--circle) - var(--b)) / 2);
-  width: 100%;
+  border-color: var(--default-b);
 }
 
 .stepper-container {
