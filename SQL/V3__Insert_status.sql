@@ -8,5 +8,5 @@ VALUES (0, 'Not started'),
        (3, 'Payment received'),
        (4, 'Ownership transfer complete'),
 	   (5, 'Persona Notified'),
-	   (-1, 'Purchase Falied');
+	   (-1, 'Purchase Failed');
 GO
