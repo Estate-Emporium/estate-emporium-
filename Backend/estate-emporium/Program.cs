@@ -34,7 +34,7 @@ builder.Services.AddCors(options =>
 // Add services to the container.
 builder.Services.AddControllers(options =>
 {
-    options.Filters.Add<ValidateBodyUtils>();
+  options.Filters.Add<ValidateBodyUtils>();
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -51,30 +51,37 @@ builder.Services.AddMvc();
 
 builder.Services.AddHttpClient(nameof(HttpClientEnum.property_manager), httpClient =>
 {
-    httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("property_URL"));
-    httpClient.DefaultRequestHeaders.Add("X-Origin", "real_estate_sales");
+  httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("property_URL"));
+  httpClient.DefaultRequestHeaders.Add("X-Origin", "real_estate_sales");
 
 })
 .AddPolicyHandler(PollyUtils.GetRetryPolicy());
 
 builder.Services.AddHttpClient(nameof(HttpClientEnum.home_loans), httpClient =>
 {
-    httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("home_loans_URL"));
-    httpClient.DefaultRequestHeaders.Add("X-Origin", "real_estate_sales");
+  httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("home_loans_URL"));
+  httpClient.DefaultRequestHeaders.Add("X-Origin", "real_estate_sales");
 
 }).AddPolicyHandler(PollyUtils.GetRetryPolicy());
 
 builder.Services.AddHttpClient(nameof(HttpClientEnum.retail_bank), httpClient =>
 {
-    httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("retail_bank_URL"));
-    httpClient.DefaultRequestHeaders.Add("X-Origin", "real_estate_sales");
+  httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("retail_bank_URL"));
+  httpClient.DefaultRequestHeaders.Add("X-Origin", "real_estate_sales");
 
 }).AddPolicyHandler(PollyUtils.GetRetryPolicy());
 
 builder.Services.AddHttpClient(nameof(HttpClientEnum.persona), httpClient =>
 {
-    httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("persona_URL"));
-    httpClient.DefaultRequestHeaders.Add("X-Origin", "real_estate_sales");
+  httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("persona_URL"));
+  httpClient.DefaultRequestHeaders.Add("X-Origin", "real_estate_sales");
+
+}).AddPolicyHandler(PollyUtils.GetRetryPolicy());
+
+builder.Services.AddHttpClient(nameof(HttpClientEnum.stock), httpClient =>
+{
+  httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("stock_URL"));
+  httpClient.DefaultRequestHeaders.Add("X-Origin", "real_estate_sales");
 
 }).AddPolicyHandler(PollyUtils.GetRetryPolicy());
 

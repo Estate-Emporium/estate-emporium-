@@ -8,36 +8,38 @@ using System;
 using System.Threading.Tasks;
 namespace estate_emporium.Controllers;
 
-    [Route("zeus")]
-    public class ZeusController(DbService dbService) : Controller
-    {
-        DbService _dbservice = dbService;
+[Route("zeus")]
+public class ZeusController(DbService dbService, StockService stockService) : Controller
+{
+  DbService _dbservice = dbService;
+  StockService _stockservice = stockService;
 
-        [HttpPost("reset")]
-    public IActionResult ProcessAction([FromBody] ActionRequest request)
+  [HttpPost("reset")]
+  public async Task<IActionResult> ProcessAction([FromBody] ActionRequest request)
+  {
+    if (request == null)
     {
-        if (request == null)
-        {
-            return BadRequest("Invalid request body.");
-        }
-
-        if (request.Action == "start")
-        {
-            // Logic for handling "start" action
-            return Ok($"Started something at {request.StartTime}...");
-        }
-        else if (request.Action == "reset")
-        {
-            // Logic for handling "reset" action
-            _dbservice.resetData();
-            return Ok($"Reset something at {request.StartTime}...");
-        }
-        else
-        {
-            // Handle unknown actions
-            return BadRequest("Unknown action.");
-        }
+      return BadRequest("Invalid request body.");
     }
+
+    if (request.Action == "start")
+    {
+      // Logic for handling "start" action
+      await _stockservice.registerStockAsync();
+      return Ok($"Started something at {request.StartTime}...");
+    }
+    else if (request.Action == "reset")
+    {
+      // Logic for handling "reset" action
+      _dbservice.resetData();
+      return Ok($"Reset something at {request.StartTime}...");
+    }
+    else
+    {
+      // Handle unknown actions
+      return BadRequest("Unknown action.");
+    }
+  }
 }
-    
+
 
