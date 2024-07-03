@@ -52,45 +52,47 @@ var cognitoAWSRegion = Environment.GetEnvironmentVariable("VITE_AWS_REGION");
 string validIssuer = $"https://cognito-idp.{cognitoAWSRegion}.amazonaws.com/{cognitoUserPoolId}";
 string validAudience = cognitoAppClientId;
 
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-    {
-      options.Authority = validIssuer;
-      options.TokenValidationParameters = new TokenValidationParameters
-      {
-        ValidateLifetime = true,
-        ValidAudience = validAudience,
-        ValidateAudience = true,
-        RoleClaimType = "cognito:groups"
-      };
-    });
+Console.WriteLine(validIssuer);
 
-// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//         .AddJwtBearer(options =>
-//         {
-//           options.Authority = Environment.GetEnvironmentVariable("COGNITO_PROPMAN_Authority");
+// builder.Services
+//     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+//     {
+//       options.Authority = validIssuer;
+//       options.TokenValidationParameters = new TokenValidationParameters
+//       {
+//         ValidateLifetime = true,
+//         ValidAudience = validAudience,
+//         ValidateAudience = true,
+//         RoleClaimType = "cognito:groups"
+//       };
+//     });
 
-//           options.Audience = Environment.GetEnvironmentVariable("COGNITO_PROPMAN_ClientId");
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+          options.Authority = validIssuer;
 
-//           options.TokenValidationParameters = new TokenValidationParameters
-//           {
-//             ValidateIssuer = true,
-//             ValidIssuer = Environment.GetEnvironmentVariable("COGNITO_PROPMAN_Authority"),
+          options.Audience = validAudience;
 
-//             ValidateAudience = true,
-//             ValidAudience = Environment.GetEnvironmentVariable("COGNITO_PROPMAN_ClientId"),
+          options.TokenValidationParameters = new TokenValidationParameters
+          {
+            ValidateIssuer = true,
+            ValidIssuer = validIssuer,
 
-//             ValidateIssuerSigningKey = true,
-//             IssuerSigningKeyResolver = (token, securityToken, kid, parameters) =>
-//             {
-//               // Fetch the JSON Web Key Set (JWKS) from the authority and find the matching key.
-//               var jwks = GetJsonWebKeySetAsync().GetAwaiter().GetResult();
-//               return jwks.Keys.Where(k => k.KeyId == kid);
-//             },
-//             ValidateLifetime = true
-//           };
-//         });
+            ValidateAudience = true,
+            ValidAudience = validAudience,
+
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKeyResolver = (token, securityToken, kid, parameters) =>
+            {
+              // Fetch the JSON Web Key Set (JWKS) from the authority and find the matching key.
+              var jwks = GetJsonWebKeySetAsync().GetAwaiter().GetResult();
+              return jwks.Keys.Where(k => k.KeyId == kid);
+            },
+            ValidateLifetime = true
+          };
+        });
 
 // Add services to the container.
 builder.Services.AddControllers(options =>
@@ -164,3 +166,20 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+
+async Task<JsonWebKeySet> GetJsonWebKeySetAsync()
+{
+  var cognitoAppClientId = Environment.GetEnvironmentVariable("VITE_CLIENT_ID");
+  var cognitoUserPoolId = Environment.GetEnvironmentVariable("VITE_USER_POOL_ID");
+  var cognitoAWSRegion = Environment.GetEnvironmentVariable("VITE_AWS_REGION");
+
+  string validIssuer = $"https://cognito-idp.{cognitoAWSRegion}.amazonaws.com/{cognitoUserPoolId}";
+  string validAudience = cognitoAppClientId;
+
+  var authority = validIssuer;
+  using (var httpClient = new HttpClient())
+  {
+    var response = await httpClient.GetStringAsync($"{authority}/.well-known/jwks.json");
+    return new JsonWebKeySet(response);
+  }
+}
