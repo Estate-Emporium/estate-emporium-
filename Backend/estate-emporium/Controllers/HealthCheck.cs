@@ -6,34 +6,14 @@ namespace estate_emporium.Controllers
 {
   [Route("health")]
   [ApiExplorerSettings(IgnoreApi = true)] //used to hide from swagger, can be applied to entire controller ot jsut 1 endpoint
-  public class HealthCheck(EstateDbContext dbContext, CertificateService certService) : Controller
+  public class HealthCheck(EstateDbContext dbContext) : Controller
   {
     private readonly EstateDbContext _dbContext = dbContext;
-    private readonly CertificateService _certService = certService;
 
     [HttpGet]
     public IActionResult Index()
     {
       return new JsonResult("Health OK") { StatusCode = 200 };
-    }
-
-    [HttpGet]
-    [Route("cert")]
-    public async Task<IActionResult> TestCert()
-    {
-      try
-      {
-        var cert = await _certService.GetCertAndKey();
-        if (cert != null)
-        {
-          return new ObjectResult(cert.ToString());
-        }
-        else return BadRequest("CERT FAIL");
-      }
-      catch
-      {
-        return BadRequest("CERT FAIL");
-      }
     }
 
     [HttpGet]
