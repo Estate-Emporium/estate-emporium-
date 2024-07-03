@@ -89,7 +89,18 @@ builder.Services.AddHttpClient(nameof(HttpClientEnum.retail_bank), httpClient =>
     return handler;
 }).AddPolicyHandler(PollyUtils.GetRetryPolicy());
 
-//builder.Services.AddScoped<PropertyManagerService>();
+builder.Services.AddHttpClient(nameof(HttpClientEnum.persona), httpClient =>
+{
+    httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("persona_URL"));
+    httpClient.DefaultRequestHeaders.Add("User-Agent", "real_estate_sales");
+
+}).ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler();
+    handler.ClientCertificates.Add(cert);
+    return handler;
+}).AddPolicyHandler(PollyUtils.GetRetryPolicy());
+
 //Add all services in the services namespace to be dependency injected correctly
 builder.Services.AddServicesFromNamespace(Assembly.GetExecutingAssembly(), "estate_emporium.Services");
 
