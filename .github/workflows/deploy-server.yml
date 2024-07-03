@@ -51,11 +51,11 @@ jobs:
             echo "DB_NAME=${{ secrets.DB_NAME}}" >> .env
             echo "AWS_REGION=${{ secrets.AWS_REGION}}" >> .env
             echo "DB_URL=${{ secrets.DB_URL}}" >> .env
-            echo "home_loans_URL=${{ secrets.home_loans_URL }}" >> .env
-            echo "retail_bank_URL=${{ secrets.retail_bank_URL }}" >> .env
-            echo "property_URL=${{ secrets.property_URL }}" >> .env
-            echo "persona_URL=${{secrets.persona_URL}}" >> .env
-            echo "stock_URL=${{secrets.stock_URL}}" >> .env
+            echo "home_loans_URL=${{ secrets.HOME_LOANS_URL }}" >> .env
+            echo "retail_bank_URL=${{ secrets.RETAIL_BANK_URL }}" >> .env
+            echo "property_URL=${{ secrets.PROPERTY_URL }}" >> .env
+            echo "persona_URL=${{secrets.PERSONA_URL}}" >> .env
+            echo "stock_URL=${{secrets.STOCK_URL}}" >> .env
 
 
             
