@@ -2,6 +2,8 @@ import { Button, Flex, Heading, useColorMode } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/nav-bar";
 import logo from "../assets/logo.svg";
+import backgroundLight from "../assets/background.png";
+import backgroundDark from "../assets/background-dark.png";
 
 const LandingPage = () => {
   const { colorMode } = useColorMode();
@@ -27,8 +29,8 @@ const LandingPage = () => {
         justify="center"
         backgroundImage={
           colorMode === "light"
-            ? "url('/src/assets/background.png')"
-            : "url('/src/assets/background-dark.png')"
+            ? `url(${backgroundLight})`
+            : `url(${backgroundDark})`
         }
         backgroundSize="cover"
         backgroundPosition="center"

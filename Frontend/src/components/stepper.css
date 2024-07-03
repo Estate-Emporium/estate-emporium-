@@ -24,7 +24,7 @@ ol.stepper li {
   position: relative;
 }
 ol.stepper li::before {
-  content: '';
+  content: "";
   counter-increment: step;
   display: grid;
   place-content: center;
@@ -57,6 +57,7 @@ ol.stepper li.completed ~ li::before {
   align-items: center;
   justify-content: center;
   width: 50%;
+  min-width: 18rem;
   background-color: #cad5d9;
   border-radius: 4px;
   padding: 0.5rem;
