@@ -51,6 +51,11 @@ jobs:
             echo "DB_NAME=${{ secrets.DB_NAME}}" >> .env
             echo "AWS_REGION=${{ secrets.AWS_REGION}}" >> .env
             echo "DB_URL=${{ secrets.DB_URL}}" >> .env
+            echo "VITE_AWS_REGION"=${{ secrets.VITE_AWS_REGION }} >> .env 
+            echo "VITE_USER_POOL_ID"=${{ secrets.VITE_USER_POOL_ID }} >> .env 
+            echo "VITE_CLIENT_ID"=${{ secrets.VITE_CLIENT_ID }} >> .env 
+            echo "VITE_REDIRECT_URI"=${{ secrets.VITE_REDIRECT_URI }} >> .env 
+            echo "VITE_DOMAIN"=${{ secrets.VITE_DOMAIN }} >> .env 
             
       - name: Package artifact
         run: zip -r ./server.zip .env .dockerignore *
