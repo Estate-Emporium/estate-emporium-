@@ -1,7 +1,8 @@
 import React from 'react';
 import { Tooltip } from '@chakra-ui/react';
+import './stepper.css';
 
-type Step =
+export type Step =
   | 'Purchase Failed'
   | 'Not started'
   | 'Awaiting home loan'
@@ -14,9 +15,6 @@ interface StepperProps {
 }
 
 function getCurrentState(index: number, currentStepIndex: number) {
-  if (index === currentStepIndex) {
-    return 'active';
-  }
   if (index < currentStepIndex) {
     return 'completed';
   }

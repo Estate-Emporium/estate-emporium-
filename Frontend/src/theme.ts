@@ -9,7 +9,7 @@ const customTheme = extendTheme({
   config,
   fonts: {
     heading: "Montserrat, sans-serif",
-    body: "Merriweather, serif",
+    body: "Varela, serif",
   },
   colors: {
     primary: {
@@ -61,8 +61,8 @@ const customTheme = extendTheme({
   components: {
     Button: {
       baseStyle: {
-        fontWeight: "bold",
-        fontSize: "12px",
+        fontWeight: "700",
+        fontSize: "0.75rem",
         width: "fit-content",
         p: "2vh",
       },
@@ -70,26 +70,28 @@ const customTheme = extendTheme({
         large: {
           borderRadius: "10px",
           height: "5.75rem",
-          fontSize: "1.5rem",
+          fontSize: "1.75rem",
           width: "18.5rem",
         },
         medium: {
           borderRadius: "4px",
           width: "11rem",
+          fontSize: "1rem",
           height: "2.5rem",
         },
         small: {
           borderRadius: "4px",
           height: "2.5rem",
+          fontSize: "1rem",
         },
       },
       variants: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         solid: (props: any) => ({
-          bg: props.colorMode === "dark" ? "primary.100" : "primary.200",
+          bg: props.colorMode === "dark" ? "accent.100" : "primary.200",
           color: props.colorMode === "dark" ? "primary.200" : "accent.100",
           _hover: {
-            opacity: 0.9,
+            opacity: 0.95,
           },
         }),
       },

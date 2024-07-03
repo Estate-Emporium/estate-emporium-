@@ -25,7 +25,11 @@ const LandingPage = () => {
         width="100vw"
         align="center"
         justify="center"
-        backgroundImage="url('/src/assets/background.png')"
+        backgroundImage={
+          colorMode === "light"
+            ? "url('/src/assets/background.png')"
+            : "url('/src/assets/background-dark.png')"
+        }
         backgroundSize="cover"
         backgroundPosition="center"
       >
@@ -59,6 +63,7 @@ const LandingPage = () => {
           <Button
             size="large"
             variant="solid"
+            fontWeight="700"
             bg={colorMode === "light" ? "primary.200" : "accent.100"}
             color={colorMode === "light" ? "accent.100" : "primary.200"}
             onClick={handleViewListingClick}

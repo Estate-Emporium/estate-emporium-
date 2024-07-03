@@ -9,7 +9,7 @@ namespace estate_emporium.Services
 {
   public class CertificateService
   {
-    private static readonly string secretName = "Certificate2_PFX";
+    private static readonly string secretName = "Certificate3_PFX";
     private readonly IAmazonSecretsManager secretsManagerClient;
 
     public CertificateService()
