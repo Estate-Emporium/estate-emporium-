@@ -1,9 +1,12 @@
 ﻿using estate_emporium.Models.db;
 using estate_emporium.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 namespace estate_emporium.Controllers
 {
+
+  [EnableCors("_myAllowSpecificOrigins")]
   [Route("admin")]
   public class AdminController(DbService dbService) : Controller
   {
