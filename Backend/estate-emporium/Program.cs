@@ -49,10 +49,15 @@ var cognitoAppClientId = Environment.GetEnvironmentVariable("VITE_CLIENT_ID");
 var cognitoUserPoolId = Environment.GetEnvironmentVariable("VITE_USER_POOL_ID");
 var cognitoAWSRegion = Environment.GetEnvironmentVariable("VITE_AWS_REGION");
 
+Console.WriteLine(cognitoAppClientId);
+Console.WriteLine(cognitoUserPoolId);
+Console.WriteLine(cognitoAWSRegion);
+
 string validIssuer = $"https://cognito-idp.{cognitoAWSRegion}.amazonaws.com/{cognitoUserPoolId}";
 string validAudience = cognitoAppClientId;
 
 Console.WriteLine(validIssuer);
+Console.WriteLine(validAudience);
 
 // builder.Services
 //     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
