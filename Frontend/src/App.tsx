@@ -7,7 +7,11 @@ import SalesPage from "./pages/sales-list-page";
 
 function App() {
   return (
-    <Authenticator socialProviders={["google"]} className="page-container">
+    <Authenticator
+      socialProviders={["google"]}
+      hideSignUp
+      className="page-container"
+    >
       <BrowserRouter>
         <main>
           <Routes>

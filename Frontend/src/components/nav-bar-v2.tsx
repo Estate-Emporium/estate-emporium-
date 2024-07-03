@@ -47,8 +47,8 @@ const NavBarV2 = () => {
             aria-label="Toggle color mode"
             icon={<ArrowBackIcon />}
             variant="solid"
-            bg="accent.100"
-            color={color}
+            bg={colorMode === "light" ? "primary.100" : "primary.200"}
+            color={colorMode === "light" ? "primary.200" : "accent.100"}
             onClick={handleHomeClick}
           />
         </Tooltip>
@@ -59,11 +59,17 @@ const NavBarV2 = () => {
             icon={colorMode === "light" ? <FaMoon /> : <FaSun />}
             onClick={toggleColorMode}
             variant="solid"
-            bg="accent.100"
-            color={color}
+            bg={colorMode === "light" ? "primary.100" : "primary.200"}
+            color={colorMode === "light" ? "primary.200" : "accent.100"}
           />
         </Tooltip>
-        <Button variant="solid" size="medium" onClick={handleLogout}>
+        <Button
+          variant="solid"
+          size="medium"
+          onClick={handleLogout}
+          color={colorMode === "light" ? "primary.200" : "accent.100"}
+          bg={colorMode === "light" ? "primary.100" : "primary.200"}
+        >
           Logout
         </Button>
       </Flex>

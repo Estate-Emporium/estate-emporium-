@@ -1,5 +1,5 @@
-import { Card, CardBody, Flex, Text, useColorMode } from '@chakra-ui/react';
-import StatusStepper, { Step } from './status-stepper';
+import { Card, CardBody, Flex, Text, useColorMode } from "@chakra-ui/react";
+import StatusStepper, { Step } from "./status-stepper";
 
 type ListItems = {
   id: string;
@@ -12,18 +12,36 @@ const ListCard = (listItems: ListItems) => {
   const { colorMode } = useColorMode();
   return (
     <Card
-      width='80vw'
+      width="80vw"
       style={{
-        background: `linear-gradient(to top right, ${
-          colorMode === 'light' ? '#6C869E42' : '#CAD5D942'
-        } 0%, ${colorMode === 'light' ? '#12222B42' : '#44515C42'} 100%)`,
+        background: `linear-gradient(to right, ${
+          colorMode === "light" ? "#6C869EFF" : "#CAD5D966"
+        } 0%, ${colorMode === "light" ? "#44515C66" : "#44515CFF"} 100%)`,
       }}
     >
       <CardBody>
-        <Flex flexDir='row' justify='space-between' align='center'>
-          <Text>{listItems.id}</Text>
-          <Text>{listItems.price}</Text>
-          <Text>{listItems.commission}</Text>
+        <Flex
+          flexDir="row"
+          justify="space-between"
+          align="center"
+          flexWrap="wrap"
+        >
+          <Flex
+            flexDir="row"
+            justify="space-between"
+            paddingLeft="2vw"
+            paddingRight="2vw"
+          >
+            <Text textAlign="center" minWidth="8vw">
+              {listItems.id}
+            </Text>
+            <Text textAlign="center" minWidth="10vw">
+              {listItems.price}
+            </Text>
+            <Text textAlign="center" minWidth="10vw">
+              {listItems.commission}
+            </Text>
+          </Flex>
           <StatusStepper currentStatus={listItems.status} />
         </Flex>
       </CardBody>

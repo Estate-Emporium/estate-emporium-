@@ -50,8 +50,12 @@ const customTheme = extendTheme({
       fontWeight: "500",
     },
     h4: {
-      fontSize: "2.5rem",
+      fontSize: "1rem",
       fontWeight: "400",
+    },
+    h6: {
+      fontSize: "0.5rem",
+      fontWeight: "500",
     },
     body: {
       fontSize: "1rem",
