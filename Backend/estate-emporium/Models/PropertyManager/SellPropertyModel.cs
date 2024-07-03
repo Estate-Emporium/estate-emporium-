@@ -9,7 +9,7 @@ namespace estate_emporium.Models.PropertyManager
         /// </summary>
         /// <example>123456789</example>
         [Required]
-        public ulong sellerId { get; set; }
+        public long? sellerId { get; set; }
 
     }
 }

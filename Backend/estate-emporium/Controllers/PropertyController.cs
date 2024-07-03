@@ -80,7 +80,7 @@ namespace estate_emporium.Controllers
                     return BadRequest(ex);
                 }
 
-            return Ok("Endpoint not yet implemented");
+            return Ok("LISTED FOR SALE");
         }
 
         /// <summary>
