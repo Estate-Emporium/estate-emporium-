@@ -25,7 +25,11 @@ const LandingPage = () => {
         width="100vw"
         align="center"
         justify="center"
-        backgroundImage="url('/src/assets/background.png')"
+        backgroundImage={
+          colorMode === "light"
+            ? "url('/src/assets/background.png')"
+            : "url('/src/assets/background-dark.png')"
+        }
         backgroundSize="cover"
         backgroundPosition="center"
       >
