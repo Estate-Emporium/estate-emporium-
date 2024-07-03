@@ -28,7 +28,7 @@ builder.Services.AddCors(options =>
                     policy =>
                     {
                       policy.WithOrigins(
-                                            Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "https://localhost:80/").WithMethods("GET", "POST", "PUT", "DELETE")
+                                            Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "https://localhost:5173/").WithMethods("GET", "POST", "PUT", "DELETE")
                  .WithHeaders("Authorization", "Content-Type", "Accept");
                     });
 });
