@@ -24,7 +24,7 @@ public partial class PropertySale
     public long SalePrice { get; set; } = -1;
 
     [Column("HomeLoanID")]
-    public long HomeLoanId { get; set; } = -1;
+    public string HomeLoanId { get; set; } = "";
 
     [Column(TypeName = "datetime")]
     public DateTime PurchaseDate { get; set; } = DateTime.Now;

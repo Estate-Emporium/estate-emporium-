@@ -96,7 +96,7 @@ namespace estate_emporium.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateLoanStatusAsync([FromBody] LoanApprovalModel loanApprovalModel)
         {
-            var thisSale = await _dbService.getSalebyLoanId((long)loanApprovalModel.LoanId);
+            var thisSale = await _dbService.getSalebyLoanId(loanApprovalModel.LoanId);
             if (thisSale == null)
             {
                 return NotFound("Can't find a sale with the given loan ID");
@@ -107,6 +107,7 @@ namespace estate_emporium.Controllers
                 var propertyManagerService = serviceProvider.GetRequiredService<PropertyManagerService>();
                 var bankService = serviceProvider.GetRequiredService<BankService>();
                 var personaService = serviceProvider.GetRequiredService<PersonaService>();
+                var dbSerivce=serviceProvider.GetRequiredService<DbService>();
 
                 try
                 {
@@ -117,8 +118,7 @@ namespace estate_emporium.Controllers
                     }
                     else
                     {
-                        thisSale.StatusId += 1;
-                        await _dbService.saveChangesAsync();
+                        await dbSerivce.setStatusbyId(thisSale.SaleId);
                         // Call back to transfer money to us, tax, seller
                         await bankService.transferAllMoney(thisSale);
                         await propertyManagerService.CompleteSale(thisSale.SaleId, true);

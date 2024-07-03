@@ -43,13 +43,13 @@ namespace estate_emporium.Services
             await _dbContext.SaveChangesAsync();
             //TODO Maybe here try back up the chain to tell everyone else it failed?
         }
-        public async Task populateHomeLoanId(PropertySale thisSale, long loanId)
+        public async Task populateHomeLoanId(PropertySale thisSale, string loanId)
         {
             thisSale.HomeLoanId = loanId;
             thisSale.StatusId += 1;
             await _dbContext.SaveChangesAsync();
         }
-        public async Task<PropertySale> getSalebyLoanId(long loanId)
+        public async Task<PropertySale> getSalebyLoanId(string loanId)
         {
             return await _dbContext.PropertySales.Where(s => s.HomeLoanId == loanId).FirstOrDefaultAsync();
         }
@@ -70,6 +70,12 @@ namespace estate_emporium.Services
                 Commission =  s.SalePrice - (s.SalePrice / (1 + Consts.Commission / 100))
             }).ToList() ;
             return result;
+        }
+        public async Task setStatusbyId(long id)
+        {
+            var sale = await getSaleByIdAsync(id);
+            sale.StatusId += 1;
+            await _dbContext.SaveChangesAsync();
         }
         public async Task saveChangesAsync()
         {

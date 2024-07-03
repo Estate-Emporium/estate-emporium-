@@ -58,6 +58,8 @@ namespace estate_emporium.Services
             else
             {
                 await _dbService.failSaleAsync(thisSale.SaleId);
+                var body = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to contact bank. Status code: {response.StatusCode}\n Error{body}");
                 throw new Exception("Unable to complete payments");
             }
 

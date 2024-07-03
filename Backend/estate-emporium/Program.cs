@@ -131,6 +131,7 @@ builder.Services.AddHttpClient(nameof(HttpClientEnum.retail_bank), httpClient =>
 {
   httpClient.BaseAddress = new Uri(Environment.GetEnvironmentVariable("retail_bank_URL"));
   httpClient.DefaultRequestHeaders.Add("X-Origin", "real_estate_sales");
+    httpClient.DefaultRequestHeaders.Add("X-PartnerId", "real_estate_sales");
 
 }).AddPolicyHandler(PollyUtils.GetRetryPolicy());
 

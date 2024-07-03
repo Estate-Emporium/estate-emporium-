@@ -12,7 +12,7 @@ namespace estate_emporium.Models.HomeLoans
         /// </summary>
         /// <example>43</example>
         [Required]
-        public ulong? LoanId { get; set; }
+        public string? LoanId { get; set; }
 
         /// <summary>
         /// Indicates if the loan was approved or denied.

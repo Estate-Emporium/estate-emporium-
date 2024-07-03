@@ -14,22 +14,24 @@ namespace estate_emporium.Services
             var thisSale=await _dbService.getSaleByIdAsync(saleId);
             var loanApplication = new LoanApplicationModel()
             {
-                HouseId = thisSale.PropertyId,
-                PersonId = (ulong)thisSale.BuyerId,
-                Price = thisSale.SalePrice
+                property_id = thisSale.PropertyId.ToString(),
+                candidate_id = thisSale.BuyerId.ToString(),
+                loan_amount_cents = thisSale.SalePrice
             };
 
             var response = await client.PostAsJsonAsync("api/apply", loanApplication);
             if (response.IsSuccessStatusCode)
             {
-                long homeLoanId = await response.Content.ReadFromJsonAsync <long>();
-                await _dbService.populateHomeLoanId(thisSale, homeLoanId); 
+                var body = await response.Content.ReadAsStringAsync();
+                var resp = await response.Content.ReadFromJsonAsync <LoanResponseModel>();
+                await _dbService.populateHomeLoanId(thisSale, resp.Data); 
             }
             else
             {
                 await _dbService.failSaleAsync(saleId);
-                Console.WriteLine($"Failed to request Loan. Status code: {response.StatusCode}");
-                throw new Exception("Loan service unavailible");
+                var body = await response.Content.ReadAsStringAsync();
+                Console.WriteLine($"Failed to contact homeloan. Status code: {response.StatusCode}\n Error{body}");
+                throw new Exception($"Failed to contact homeloan. Status code: {response.StatusCode}");
             }
         }
 }

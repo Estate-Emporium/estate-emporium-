@@ -7,7 +7,7 @@ CREATE TABLE [PropertySales] (
   [SellerID] bigint NOT NULL,
   [PropertyID] bigint NOT NULL,
   [SalePrice]  bigint NOT NULL,
-  [HomeLoanID] bigint NOT NULL,
+  [HomeLoanID] nvarchar(255) NOT NULL,
   [PurchaseDate] datetime NOT NULL,
   [StatusID] integer
 )
